@@ -1,5 +1,6 @@
 package com.untels.zenidscrum.controlador.seguridad;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.untels.zenidscrum.acceso.datos.SQLConexion;
 import com.untels.zenidscrum.modelo.bean.Usuario;
 import com.untels.zenidscrum.modelo.dao.SQLUsuarioDAO;
@@ -10,10 +11,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(
         name = "AutenticacionServlet",
         urlPatterns = {
+            "/principal",
             "/iniciar-sesion",
             "/cerrar-sesion"
         }
@@ -40,6 +43,8 @@ public class AutenticacionServlet extends HttpServlet {
         String path = request.getServletPath();
 
         switch (path) {
+            case "/principal":
+                principal(request, response);
             case "/iniciar-sesion":
                 iniciarSesion(request, response);
                 break;
@@ -98,23 +103,47 @@ public class AutenticacionServlet extends HttpServlet {
             HttpServletResponse response
     ) throws ServletException, IOException {
         String correoElectronico = request.getParameter("correo-electronico");
+        String contrasenia = request.getParameter("contrasenia");
 
         Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreoElectronico(correoElectronico);
 
-        if (usuario != null) {
-            // TODO: Validar contrasenia
+        if (usuario != null && contraseniaValida(contrasenia, usuario.getContrasenia())) {
+            HttpSession sesion = request.getSession();
+            sesion.setAttribute("usuario-autenticado", usuario);
+        } else {
+            request.setAttribute("mensaje", "Correo electrónico o contraseña incorrectas");
+        }
 
+        response.sendRedirect("principal");
+    }
+
+    private void cerrarSesion(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        HttpSession sesion = request.getSession();
+        sesion.removeAttribute("usuario-autenticado");
+        response.sendRedirect("principal");
+    }
+
+    private void principal(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        HttpSession sesion = request.getSession();
+        if (sesion.getAttribute("usuario-autenticado") != null) {
             request.getRequestDispatcher("WEB-INF/principal.jsp")
                     .forward(request, response);
         } else {
             request.getRequestDispatcher("index.jsp")
                     .forward(request, response);
         }
-
     }
 
-    private void cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
-
+    private boolean contraseniaValida(String contrasenia, String encriptado) {
+        BCrypt.Result resultado = BCrypt.verifyer().verify(
+                contrasenia.toCharArray(), encriptado);
+        return resultado.verified;
     }
 
 }
