@@ -45,6 +45,7 @@ public class AutenticacionServlet extends HttpServlet {
         switch (path) {
             case "/principal":
                 principal(request, response);
+                break;
             case "/iniciar-sesion":
                 iniciarSesion(request, response);
                 break;
@@ -130,14 +131,8 @@ public class AutenticacionServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
-        HttpSession sesion = request.getSession();
-        if (sesion.getAttribute("usuario-autenticado") != null) {
-            request.getRequestDispatcher("WEB-INF/principal.jsp")
-                    .forward(request, response);
-        } else {
-            request.getRequestDispatcher("index.jsp")
-                    .forward(request, response);
-        }
+        request.getRequestDispatcher("WEB-INF/principal.jsp")
+                .forward(request, response);
     }
 
     private boolean contraseniaValida(String contrasenia, String encriptado) {
