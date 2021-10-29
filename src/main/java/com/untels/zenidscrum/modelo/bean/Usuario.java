@@ -6,6 +6,7 @@ public class Usuario {
     private String nombre;
     private String correoElectronico;
     private String contrasenia;
+    private Rol rol;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -39,4 +40,11 @@ public class Usuario {
         this.contrasenia = contrasenia;
     }
 
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
 }
