@@ -2,6 +2,13 @@ package com.untels.zenidscrum.modelo.bean;
 
 public class Privilegio {
 
+    public static String[] TIPOS = new String[]{
+        "USUARIOS",
+        "ROLES",
+        "PROFORMAS",
+        "COMPROBANTES",
+        "REPORTES",};
+
     private int idPrivilegio;
     private String nombre;
     private boolean crear;
