@@ -6,6 +6,7 @@ public class Usuario {
     private String nombre;
     private String correoElectronico;
     private String contrasenia;
+    private boolean habilitado;
     private Rol rol;
 
     public int getIdUsuario() {
@@ -38,6 +39,14 @@ public class Usuario {
 
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+
+    public boolean isHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
     }
 
     public Rol getRol() {
