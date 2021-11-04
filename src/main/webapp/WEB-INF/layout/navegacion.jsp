@@ -15,6 +15,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="usuarios">
+                        Usuarios
+                    </a>
+                </li>
+                <li class="nav-item">
                     <span class="nav-link active">
                         <%=usuario.getNombre()%>
                     </span>
