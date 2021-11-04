@@ -1,3 +1,4 @@
+<%@page import="com.untels.zenidscrum.modelo.bean.Privilegio"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="com.untels.zenidscrum.modelo.bean.Rol"%>
@@ -14,9 +15,15 @@
     </head>
     <body>
         <%@ include file="../layout/navegacion.jsp" %> 
+        <%
+            Privilegio prvModRol = usuario
+                    .getRol()
+                    .getPrivilegioPorNombre("ROLES");
+        %>
         <main class="container">
             <div class="card">
                 <div class="card-body">
+                    <% if (prvModRol.isListar()) { %>
                     <table class="table">
                         <thead class="table-dark">
                             <tr>
@@ -24,7 +31,11 @@
                                 <th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>
-                                    <a href="formulario-rol" class="btn btn-primary">Nuevo</a>
+                                    <% if (prvModRol.isCrear()) { %>
+                                    <a href="formulario-rol" class="btn btn-primary">
+                                        Nuevo
+                                    </a>
+                                    <% } %>
                                 </th>
                             </tr>
                         </thead>
@@ -35,26 +46,35 @@
                                 <td><%=r.getNombre()%></td>
                                 <td><%=r.getDescripcion()%></td>
                                 <td>
+                                    <% if (prvModRol.isActualizar()) { %>
                                     <a href="formulario-rol?idRol=<%=r.getIdRol()%>" 
                                        class="btn btn-warning">
                                         Editar
                                     </a>
-                                    <% if (r.isHabilitado()) { %>
-                                    <a href="inhabilitar-rol?idRol=<%=r.getIdRol()%>" 
-                                       class="btn btn-danger">
-                                        Inhabilitar
-                                    </a>
-                                    <% } else { %>
-                                    <a href="habilitar-rol?idRol=<%=r.getIdRol()%>" 
-                                       class="btn btn-dark">
-                                        Habilitar
-                                    </a>
+                                    <% } %>
+                                    <% if (prvModRol.isEliminar()) { %>
+                                        <% if (r.isHabilitado()) { %>
+                                        <a href="inhabilitar-rol?idRol=<%=r.getIdRol()%>" 
+                                           class="btn btn-danger">
+                                            Inhabilitar
+                                        </a>
+                                        <% } else { %>
+                                        <a href="habilitar-rol?idRol=<%=r.getIdRol()%>" 
+                                           class="btn btn-dark">
+                                            Habilitar
+                                        </a>
+                                        <% } %>
                                     <% } %>
                                 </td>
                             </tr>
                             <% } %>
                         </tbody>
                     </table>
+                    <% } else { %>
+                    <div class="alert alert-danger">
+                        No tiene acceso
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </main>
