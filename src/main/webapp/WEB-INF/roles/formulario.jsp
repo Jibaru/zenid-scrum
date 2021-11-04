@@ -17,12 +17,19 @@
     </head>
     <body>
         <%@ include file="../layout/navegacion.jsp" %> 
+        <%
+            Privilegio prvModRol = usuario
+                    .getRol()
+                    .getPrivilegioPorNombre("ROLES");
+        %>
         <main class="container">
             <div class="card">
                 <div class="card-header">
                     <h2>Rol</h2>
                 </div>
                 <div class="card-body">
+                    <% if (prvModRol.isCrear() || 
+                            (prvModRol.isActualizar() && edicion)) { %>
                     <form 
                         <% if (edicion) { %>
                             action="modificar-rol?idRol=<%=rol.getIdRol()%>"
@@ -115,6 +122,11 @@
                         </button>
                         <% } %>
                     </form>
+                    <% } else { %>
+                    <div class="alert alert-danger">
+                        No tiene acceso
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </main>
