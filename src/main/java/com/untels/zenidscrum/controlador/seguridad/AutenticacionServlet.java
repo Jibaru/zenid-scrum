@@ -113,6 +113,8 @@ public class AutenticacionServlet extends HttpServlet {
             sesion.setAttribute("usuario-autenticado", usuario);
         } else {
             request.setAttribute("mensaje", "Correo electrónico o contraseña incorrectas");
+            request.getRequestDispatcher("index.jsp")
+                    .forward(request, response);
         }
 
         response.sendRedirect("principal");
