@@ -50,4 +50,14 @@ public class Rol {
         this.privilegios = privilegios;
     }
 
+    public Privilegio getPrivilegioPorNombre(String nombre) {
+        Privilegio privilegio = null;
+        for (int i = 0; privilegio == null && i < privilegios.size(); i++) {
+            if (privilegios.get(i).getNombre().equalsIgnoreCase(nombre)) {
+                privilegio = privilegios.get(i);
+            }
+        }
+        return privilegio;
+    }
+
 }
