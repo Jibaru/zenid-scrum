@@ -9,22 +9,19 @@ package com.untels.zenidscrum.modelo.bean;
  *
  * @author Administrador
  */
-public class Proveedor {
+public class Representante {
     
-    private int idProveedor;
+    private int idRepresentante;
     private String nombre;
-    private int ruc;
     private String correoElectronico;
     private int telefono;
-    private int id_representante;
-    private boolean habilitado;
 
-    public int getIdProveedor() {
-        return idProveedor;
+    public int getIdRepresentante() {
+        return idRepresentante;
     }
 
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
+    public void setIdRepresentante(int idRepresentante) {
+        this.idRepresentante = idRepresentante;
     }
 
     public String getNombre() {
@@ -33,14 +30,6 @@ public class Proveedor {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public int getRuc() {
-        return ruc;
-    }
-
-    public void setRuc(int ruc) {
-        this.ruc = ruc;
     }
 
     public String getCorreoElectronico() {
@@ -58,23 +47,7 @@ public class Proveedor {
     public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
-
-    public int getId_representante() {
-        return id_representante;
-    }
-
-    public void setId_representante(int id_representante) {
-        this.id_representante = id_representante;
-    }
-
-    public boolean isHabilitado() {
-        return habilitado;
-    }
-
-    public void setHabilitado(boolean habilitado) {
-        this.habilitado = habilitado;
-    }
-   
-
+    
+    
     
 }
