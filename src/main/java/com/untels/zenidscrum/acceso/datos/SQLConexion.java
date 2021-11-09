@@ -8,7 +8,7 @@ public class SQLConexion implements Conexion {
 
     private final String URL = "jdbc:mysql://localhost/bd_zenid_scrum?useSSL=false&serverTimezone=UTC&useLegacyDateTimeCode=false";
     private final String USUARIO = "root";
-    private final String CLAVE = "";
+    private final String CLAVE = "root";
 
     @Override
     public Connection getConnection() {
