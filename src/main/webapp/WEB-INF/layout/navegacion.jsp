@@ -44,6 +44,6 @@
         <li><a href="#home">HOME</a></li>
         <li><a href="#">Gestionar Productos</a></li>
         <li><a href="fproveedor">Gestionar Proveedores</a></li>
-        <li><a href="#about">About</a></li>    
+        <li><a href="VerificarStock">About</a></li>    
       </ul>
     </div>
