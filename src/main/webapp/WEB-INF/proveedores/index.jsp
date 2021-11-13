@@ -30,8 +30,8 @@
 
               <h1 style="vertical-align: middle">Proveedores</h1>
 
-            </div>
-
+           </div>
+<!-- 
             <div class="divididos" id="divi2" >
 
               <div class="input-group mb-3" style="width: 45%;margin-left: 200px;">
@@ -52,7 +52,7 @@
                 </div>
               </div>
 
-            </div>
+            </div>-->
 
           </div>
              
