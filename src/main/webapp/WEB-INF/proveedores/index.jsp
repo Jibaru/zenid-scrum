@@ -19,8 +19,11 @@
 <!--Compressed JavaScript -->
  <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.3/dist/js/foundation.min.js" crossorigin="anonymous"></script>
     </head>
-    <body style="width: 85%;border: 1px solid black">
+    <body >
          <%@ include file="../layout/navegacion.jsp" %> 
+         <main class="container">
+             
+         </main>
            
     </body>
 </html>
