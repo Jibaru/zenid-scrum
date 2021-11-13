@@ -5,8 +5,8 @@
   text-align: center;  
 }
 #espbotones>button{
-  margin-inline: 10%;
-  width: 140px;
+  margin-inline: 5%;
+  width: 120px;
   font-size: 24px;
   font-family:Verdana,Helvetica;
   font-weight:bold;
@@ -104,20 +104,19 @@
   width: 50%;
   height: 100%;
   float: left;
-  /* border: 1px solid blue;    
+/*  border: 1px solid green;     
   background-color: yellow; */
   
 
 }
 #divi1{
-
   align-items: center;
   display: flex;
   justify-content: center;
 }
-/* #divi2{
-  /* text-align: center; */
-  /* border: 1PX solid RED; 
-}*/
+ #divi2{
+   text-align: center; 
+/*   border: 1PX solid RED; */
+}
 
 
