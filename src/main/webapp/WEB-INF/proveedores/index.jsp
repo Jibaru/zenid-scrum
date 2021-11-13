@@ -91,12 +91,12 @@
           </div>
           
 
-          <div id="espbotones">
+         <!-- <div id="espbotones">
             <button type="button" class="btn btn-primary">Nuevo</button>
             <button type="button" class="btn btn-primary">Editar</button>
             <button type="button" class="btn btn-primary">Borrar</button>
 
-          </div>
+          </div>-->
 
          </main>
            
