@@ -1,7 +1,8 @@
 package com.untels.zenidscrum.modelo.dao;
 
 import com.untels.zenidscrum.acceso.datos.Conexion;
-import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.bean.Privilegio;
+import com.untels.zenidscrum.modelo.bean.Rol;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,37 +10,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLProveedorDAO implements ProveedorDAO {
-
+public class SQLMarcaDAO implements MarcaDAO{
+    
+    
     private final Conexion conexion;
 
-    public SQLProveedorDAO(Conexion conexion) {
+    public SQLMarcaDAO(Conexion conexion) {
         this.conexion = conexion;
     }
 
     @Override
-    public List<Proveedor> listarTodos() {
-        String sql = "SELECT * FROM proveedor";
-
+    public List<String> listarTodos() {
+        String sql = "SELECT DISTINCT marca FROM `producto`";
+        
         Connection conn = conexion.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Proveedor> proveedores = new ArrayList<>();
-
+        
+        List<String> marca = new ArrayList<>();
+        
+        
+        
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery(sql);
 
             while (rs.next()) {
-                Proveedor prov = new Proveedor();
-                prov.setIdProveedor(rs.getInt("id_proveedor"));
-                prov.setCorreoElectronico(rs.getString("correo_electronico"));
-                prov.setNombre(rs.getString("nombre"));
-                prov.setRuc(rs.getString("ruc"));
-                prov.setTelefono(rs.getString("telefono"));
-                prov.setHabilitado(rs.getBoolean("habilitado"));
-                prov.setIdRepresentante(rs.getInt("id_representante"));
-                proveedores.add(prov);
+                marca.add(rs.getString("marca"));
             }
 
         } catch (SQLException ex) {
@@ -67,8 +64,8 @@ public class SQLProveedorDAO implements ProveedorDAO {
                 }
             }
         }
-
-        return proveedores;
+        
+        return marca;
+        
     }
-
 }

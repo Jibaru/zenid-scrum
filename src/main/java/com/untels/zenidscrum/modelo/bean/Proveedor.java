@@ -13,10 +13,10 @@ public class Proveedor {
     
     private int idProveedor;
     private String nombre;
-    private int ruc;
+    private String ruc;
     private String correoElectronico;
-    private int telefono;
-    private int id_representante;
+    private String telefono;
+    private int idRepresentante;
     private boolean habilitado;
 
     public int getIdProveedor() {
@@ -35,11 +35,11 @@ public class Proveedor {
         this.nombre = nombre;
     }
 
-    public int getRuc() {
+    public String getRuc() {
         return ruc;
     }
 
-    public void setRuc(int ruc) {
+    public void setRuc(String ruc) {
         this.ruc = ruc;
     }
 
@@ -51,20 +51,20 @@ public class Proveedor {
         this.correoElectronico = correoElectronico;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    public int getId_representante() {
-        return id_representante;
+    public int getIdRepresentante() {
+        return idRepresentante;
     }
 
-    public void setId_representante(int id_representante) {
-        this.id_representante = id_representante;
+    public void setIdRepresentante(int idRepresentante) {
+        this.idRepresentante = idRepresentante;
     }
 
     public boolean isHabilitado() {
@@ -74,7 +74,5 @@ public class Proveedor {
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
-   
-
     
 }

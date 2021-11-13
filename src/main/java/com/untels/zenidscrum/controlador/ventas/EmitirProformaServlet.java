@@ -1,6 +1,16 @@
 package com.untels.zenidscrum.controlador.ventas;
 
+import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.bean.Producto;
+import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.dao.MarcaDAO;
+import com.untels.zenidscrum.modelo.dao.ProductoDAO;
+import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.SQLMarcaDAO;
+import com.untels.zenidscrum.modelo.dao.SQLProductoDAO;
+import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,11 +20,23 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(
         name = "EmitirProformaServlet",
         urlPatterns = {
-            "/emision-proforma"
+            "/emision-proforma",
+            "/buscar-productos-proforma"
         }
 )
 public class EmitirProformaServlet extends HttpServlet {
 
+    private final MarcaDAO marcaDAO;
+    private final ProveedorDAO proveedorDAO;
+    private final ProductoDAO productoDAO;
+
+    public EmitirProformaServlet() {
+        this.marcaDAO = new SQLMarcaDAO(new SQLConexion());
+        this.proveedorDAO = new SQLProveedorDAO(new SQLConexion());
+        this.productoDAO = new SQLProductoDAO(new SQLConexion());
+    }
+   
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,6 +52,9 @@ public class EmitirProformaServlet extends HttpServlet {
         switch (path) {
             case "/emision-proforma":
                 emisionProforma(request, response);
+                break;
+            case "/buscar-productos-proforma":
+                buscarProductoProforma(request, response);
                 break;
         }
     }
@@ -77,8 +102,42 @@ public class EmitirProformaServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
-        // TODO: Cargar marcas
-        // TODO: Cargar proveedores
+
+        List<String> marca = marcaDAO.listarTodos();
+        request.setAttribute("marcas", marca);
+
+        List<Proveedor> proveedor = proveedorDAO.listarTodos();
+        request.setAttribute("proveedores", proveedor);
+        
+
+        request.getRequestDispatcher("WEB-INF/emitir-proforma/index.jsp")
+                .forward(request, response);
+    }
+
+    private void buscarProductoProforma(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        String nombre = request.getParameter("nombre");
+        String marca = request.getParameter("marca");
+        String idproveedor = request.getParameter("idproveedor");
+        
+        System.out.println(nombre);
+        System.out.println(marca);
+        System.out.println(idproveedor);
+        
+        Integer idProv = idproveedor != null && idproveedor.isEmpty() ? null:Integer.parseInt(idproveedor);
+        
+        List<Producto> producto = productoDAO.buscar(nombre, marca, idProv);
+        
+        request.setAttribute("productos", producto);
+        
+        
+        List<String> marcas = marcaDAO.listarTodos();
+        request.setAttribute("marcas", marcas);
+
+        List<Proveedor> proveedor = proveedorDAO.listarTodos();
+        request.setAttribute("proveedores", proveedor);
+        
+
         request.getRequestDispatcher("WEB-INF/emitir-proforma/index.jsp")
                 .forward(request, response);
     }

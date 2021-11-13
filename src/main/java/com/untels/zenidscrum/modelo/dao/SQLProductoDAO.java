@@ -26,7 +26,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 + marca + "%'";
 
         if (idProveedor != null) {
-            sql += " AND p.id_proveedor = ? ";
+            sql += " AND p.id_proveedor = " + idProveedor.toString();
         }
 
         Connection conn = conexion.getConnection();
@@ -38,11 +38,12 @@ public class SQLProductoDAO implements ProductoDAO {
             ps = conn.prepareStatement(sql);
             //ps.setString(1, termino + "%");
             //ps.setString(2, marca + "%");
-
+/*
             if (idProveedor != null) {
-                ps.setInt(1, idProveedor);
-            }
+                ps.setString(1, idProveedor.toString());
+            }*/
 
+            System.out.println(sql);
             rs = ps.executeQuery(sql);
 
             while (rs.next()) {
