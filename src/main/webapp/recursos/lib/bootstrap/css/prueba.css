@@ -118,5 +118,43 @@
    text-align: center; 
 /*   border: 1PX solid RED; */
 }
-
-
+/*///////////agregar producto vista/////////////////*/
+.divis{
+    display: inline-block;
+     /* border: 1px solid rgb(199, 149, 108);  */
+    width: 50%; 
+    padding-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+      
+}
+/*
+.inp{
+    margin-top: 10px;
+}*/
+#contenedor{
+    margin-top: 25px;
+    padding-top: 20px;
+    /* padding-left: 20px;
+    padding-right: 20px; */
+    /*border: 2px solid rgba(17, 30, 214, 0.932); */
+    height: 530px;
+    width: 96%;
+    box-shadow: 30px 30px 60px 20px rgba(0, 0, 0, 0.3);
+    margin-left: 2%;
+    border-radius: 10px 10px 10px 10px;
+    
+}
+#imagen{
+    /* border: 1px solid #1daa34; */
+    text-align: center;
+}
+#ee{
+    float: right;
+}
+h1{
+    margin-left: 10px;
+}
+.class>inp{
+    width: 20%
+}
