@@ -42,8 +42,8 @@
 <div id="costado" class="lado" >
     <ul>
         <li><a href="#home">HOME</a></li>
-        <li><a href="#news">Gestionar Productos</a></li>
+        <li><a href="../proveedores/formulario.jsp">Gestionar Productos</a></li>
         <li><a href="#contact">Gestionar Proveedores</a></li>
-        <li><a href="#about">About</a></li>
+        <li><a href="#about">About</a></li>    
       </ul>
     </div>
