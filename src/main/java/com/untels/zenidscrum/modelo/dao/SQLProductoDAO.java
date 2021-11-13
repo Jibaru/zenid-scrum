@@ -19,9 +19,11 @@ public class SQLProductoDAO implements ProductoDAO {
 
     @Override
     public List<Producto> buscar(String termino, String marca, Integer idProveedor) {
-        String sql = "SELECT * FROM productos p"
-                + "WHERE p.nombre LIKE ? "
-                + "AND p.marca LIKE ? ";
+        String sql = "SELECT * FROM producto p "
+                + "WHERE p.nombre LIKE '"
+                + termino + "%'"
+                + "AND p.marca LIKE '"
+                + marca + "%'";
 
         if (idProveedor != null) {
             sql += " AND p.id_proveedor = ? ";
@@ -34,11 +36,11 @@ public class SQLProductoDAO implements ProductoDAO {
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, termino + "%");
-            ps.setString(2, marca + "%");
+            //ps.setString(1, termino + "%");
+            //ps.setString(2, marca + "%");
 
             if (idProveedor != null) {
-                ps.setInt(3, idProveedor);
+                ps.setInt(1, idProveedor);
             }
 
             rs = ps.executeQuery(sql);
