@@ -42,7 +42,7 @@
 <div id="costado" class="lado" >
     <ul>
         <li><a href="#home">HOME</a></li>
-        <li><a href="#">Gestionar Productos</a></li>
+        <li><a href="agreprproduc">Gestionar Productos</a></li>
         <li><a href="fproveedor">Gestionar Proveedores</a></li>
         <li><a href="#about">About</a></li>    
       </ul>
