@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : 12/11/2021, 08:34:05 PM
-    Author     : gabriel
---%>
-
 <%@page import="com.untels.zenidscrum.modelo.bean.Producto"%>
 <%@page import="com.untels.zenidscrum.modelo.bean.Proveedor"%>
 <%@page import="java.util.ArrayList"%>
@@ -13,12 +7,13 @@
     List<String> marca = (ArrayList<String>) request.getAttribute("marcas");
     List<Proveedor> proveedor = (ArrayList<Proveedor>) request.getAttribute("proveedores");
     List<Producto> producto = (ArrayList<Producto>) request.getAttribute("productos");
+    List<Producto> productoEquivalente = (ArrayList<Producto>) request.getAttribute("productosEquivalentes");
 %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Emitir Proforma</title>
         <%@ include file="../layout/estilos.jsp" %> 
     </head>
     <body>
@@ -26,8 +21,6 @@
 
 
         <form class="row g-3" action="buscar-productos-proforma" method="get">
-
-
             <div class="col-md-3">
                 <label  class="form-label">Nombre</label>
                 <input type="text" class="form-control" name="nombre">
@@ -84,9 +77,33 @@
                 <% }%>
             </tbody>
         </table>
-        
         <%}%>
 
-
+        <%if (productoEquivalente != null) { %>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Descripción</th>
+                    <th>Stock</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (Producto p : productoEquivalente) {%>
+                <tr>
+                    <td><%=p.getIdProducto()%></td>
+                    <td><%=p.getNombre()%></td>
+                    <td><%=p.getMarca()%></td>
+                    <td><%=p.getDescripcion()%></td>
+                    <td><%=p.getStock()%></td>
+                    <td> Agregar proforma </td>
+                </tr>
+                <% }%>
+            </tbody>
+        </table>
+        <%}%>
     </body>
 </html>

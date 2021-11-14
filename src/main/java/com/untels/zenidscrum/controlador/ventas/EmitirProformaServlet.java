@@ -127,9 +127,10 @@ public class EmitirProformaServlet extends HttpServlet {
         Integer idProv = idproveedor != null && idproveedor.isEmpty() ? null:Integer.parseInt(idproveedor);
         
         List<Producto> producto = productoDAO.buscar(nombre, marca, idProv);
-        
         request.setAttribute("productos", producto);
         
+        List<Producto> productosEquivalentes = productoDAO.buscarEquivalentes(nombre, marca, idProv);
+        request.setAttribute("productosEquivalentes", productosEquivalentes);
         
         List<String> marcas = marcaDAO.listarTodos();
         request.setAttribute("marcas", marcas);

@@ -91,5 +91,79 @@ public class SQLProductoDAO implements ProductoDAO {
 
         return productos;
     }
+    
+    @Override
+    public List<Producto> buscarEquivalentes(String termino, String marca, Integer idProveedor) {
+        String sql = "SELECT * FROM producto p "
+                + "WHERE p.nombre LIKE '"
+                + termino + "%'"
+                + "AND p.marca NOT LIKE '"
+                + marca + "%'";
 
+        if (idProveedor != null) {
+            sql += " AND p.id_proveedor = " + idProveedor.toString();
+        }
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+            //ps.setString(1, termino + "%");
+            //ps.setString(2, marca + "%");
+/*
+            if (idProveedor != null) {
+                ps.setString(1, idProveedor.toString());
+            }*/
+
+            System.out.println(sql);
+            rs = ps.executeQuery(sql);
+
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setIdProducto(rs.getInt("id_producto"));
+                p.setNombre(rs.getString("nombre"));
+                p.setCodBarras(rs.getString("cod_barras"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setMarca(rs.getString("marca"));
+                p.setFamilia(rs.getString("familia"));
+                p.setLinea(rs.getString("linea"));
+                p.setStock(rs.getInt("stock"));
+                p.setIgv(rs.getFloat("igv"));
+                p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setHabilitado(rs.getBoolean("habilitado"));
+
+                productos.add(p);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return productos;
+    }
 }
