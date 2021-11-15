@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.untels.zenidscrum.controlador.seguridad;
 
 import com.untels.zenidscrum.acceso.datos.SQLConexion;
@@ -10,7 +5,6 @@ import com.untels.zenidscrum.modelo.bean.Proveedor;
 import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
 import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,17 +12,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 @WebServlet(
-        name = "Proveedor", 
-        urlPatterns = {"/Proveedor","/fproveedor","/ProveedorNu_ed"})
-
+        name = "Proveedor",
+        urlPatterns = {
+            "/proveedores",
+            "/formulario-proveedor",
+            "/crear-proveedor",
+            "/modificar-proveedor",
+            "/inhabilitar-proveedor",
+            "/habilitar-proveedor"
+        }
+)
 public class ProveedorServlet extends HttpServlet {
-    private final  ProveedorDAO proveedordao;
-    
-    public ProveedorServlet(){
+
+    private final ProveedorDAO proveedorDAO;
+
+    public ProveedorServlet() {
         SQLConexion conexion = new SQLConexion();
-    this.proveedordao = new SQLProveedorDAO(conexion);
+        this.proveedorDAO = new SQLProveedorDAO(conexion);
     }
 
     /**
@@ -43,24 +44,29 @@ public class ProveedorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           
-            String path = request.getServletPath();
-            
-            if (path.equals("/fproveedor")) {
-                
-                listar(request, response);
-                request.getRequestDispatcher("WEB-INF/proveedores/index.jsp").forward(request, response);
-            }
-            if (path.equals("/ProveedorNu_ed")) {
-                
-                
-            request.getRequestDispatcher("WEB-INF/proveedores/formulario.jsp").forward(request, response);
+        String path = request.getServletPath();
 
-            }
-            
-            
+        switch (path) {
+            case "/proveedores":
+                listar(request, response);
+                break;
+            case "/formulario-proveedor":
+                formulario(request, response);
+                break;
+            case "/crear-proveedor":
+                crearProveedor(request, response);
+                break;
+            case "/modificar-proveedor":
+                modificarProveedor(request, response);
+                break;
+            case "/inhabilitar-proveedor":
+                inhabilitarProveedor(request, response);
+                break;
+            case "/habilitar-proveedor":
+                habilitarProveedor(request, response);
+                break;
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -101,12 +107,12 @@ public class ProveedorServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
     private void listar(
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
-        List<Proveedor> proveedores = proveedordao.listarTodos();
+        List<Proveedor> proveedores = proveedorDAO.listarTodos();
 
         request.setAttribute("proveedores", proveedores);
 
@@ -114,5 +120,28 @@ public class ProveedorServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-    
+    private void formulario(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        request.getRequestDispatcher("WEB-INF/proveedores/formulario.jsp")
+                .forward(request, response);
+    }
+
+    private void crearProveedor(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void modificarProveedor(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void inhabilitarProveedor(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void habilitarProveedor(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
