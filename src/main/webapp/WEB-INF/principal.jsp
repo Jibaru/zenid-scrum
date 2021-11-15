@@ -4,9 +4,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Principal</title>
-        <%@ include file="layout/estilos.jsp" %> 
+        <%@ include file="layout/estilos.jsp" %>
     </head>
     <body>
-        <%@ include file="layout/navegacion.jsp" %> 
+        <main>
+            <%@ include file="layout/navegacion.jsp" %>
+            <%@ include file="layout/barra-lateral.jsp" %>
+            <section id="main">
+                <h1>Bienvenido al sistema</h1>
+            </section>
+        </main>
     </body>
 </html>
