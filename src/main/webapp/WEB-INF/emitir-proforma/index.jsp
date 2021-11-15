@@ -1,3 +1,5 @@
+<%@page import="com.untels.zenidscrum.modelo.bean.ProductoProformado"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Precio"%>
 <%@page import="com.untels.zenidscrum.modelo.bean.Producto"%>
 <%@page import="com.untels.zenidscrum.modelo.bean.Proveedor"%>
 <%@page import="java.util.ArrayList"%>
@@ -8,6 +10,9 @@
     List<Proveedor> proveedores = (ArrayList<Proveedor>) request.getAttribute("proveedores");
     List<Producto> productos = (ArrayList<Producto>) request.getAttribute("productos");
     List<Producto> productosEquivalentes = (ArrayList<Producto>) request.getAttribute("productosEquivalentes");
+    List<ProductoProformado> productosProforma = (List<ProductoProformado>) request
+            .getSession()
+            .getAttribute("productos-proforma");
 %>
 <!DOCTYPE html>
 <html>
@@ -62,84 +67,368 @@
                         </form>
                     </div>
                 </div>
-                <%if (productos != null) { %>
-                <h2 class="mt-2 mb-2">Productos encontrados</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>Marca</th>
-                                        <th>Descripción</th>
-                                        <th>Stock</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (Producto p : productos) {%>
-                                    <tr>
-                                        <td><%=p.getIdProducto()%></td>
-                                        <td><%=p.getNombre()%></td>
-                                        <td><%=p.getMarca()%></td>
-                                        <td><%=p.getDescripcion()%></td>
-                                        <td><%=p.getStock()%></td>
-                                        <td>
-                                            <button data-id="<%=p.getIdProducto()%>"
-                                                    type="button"
-                                                    class="btn btn-primary">
-                                                Agregar a proforma
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% }%>
-                                </tbody>
-                            </table>
+                <div class="row">
+                    <div class="col-md-8">
+                        <%if (productos != null) { %>
+                        <h2 class="mt-2 mb-2">Productos encontrados</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Nombre</th>
+                                                <th>Marca</th>
+                                                <th>Descripción</th>
+                                                <th>Stock</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (Producto p : productos) {%>
+                                            <tr>
+                                                <td><%=p.getIdProducto()%></td>
+                                                <td><%=p.getNombre()%></td>
+                                                <td><%=p.getMarca()%></td>
+                                                <td><%=p.getDescripcion()%></td>
+                                                <td><%=p.getStock()%></td>
+                                                <td>
+                                                    <form action="agregar-producto-proforma?idProducto=<%=p.getIdProducto()%>"
+                                                          method="POST">
+                                                        <button
+                                                            type="button"
+                                                            data-bs-toggle="modal" data-bs-target="#modal-<%=p.getIdProducto()%>"
+                                                            class="btn btn-primary">
+                                                            Agregar a proforma
+                                                        </button>
+                                                        <div class="modal fade"
+                                                             id="modal-<%=p.getIdProducto()%>"
+                                                             tabindex="-1"
+                                                             aria-labelledby="exampleModalLabel"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">
+                                                                            <%=p.getNombre()%>
+                                                                        </h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label>Cantidad</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                name="cantidad"
+                                                                                class="form-control"
+                                                                                required/>
+                                                                        </div>
+                                                                        <div class="form-group mb-2">
+                                                                            <label>Precio</label>
+                                                                            <select name="precio" class="form-control">
+                                                                                <% for (Precio prec : p.getPrecios()) {%>
+                                                                                <option value="<%=prec.getIdPrecio()%>">
+                                                                                    S/. <%=prec.getPrecioUnitario()%> | Factor: <%=prec.getFactor()%>
+                                                                                </option>
+                                                                                <% } %>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                            Cancelar
+                                                                        </button>
+                                                                        <button class="btn btn-primary">
+                                                                            Agregar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
+                        <%if (productosEquivalentes != null) { %>
+                        <h2 class="mt-2 mb-2">Productos similares</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Nombre</th>
+                                                <th>Marca</th>
+                                                <th>Descripción</th>
+                                                <th>Stock</th>
+                                                <th>Opciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (Producto p : productosEquivalentes) {%>
+                                            <tr>
+                                                <td><%=p.getIdProducto()%></td>
+                                                <td><%=p.getNombre()%></td>
+                                                <td><%=p.getMarca()%></td>
+                                                <td><%=p.getDescripcion()%></td>
+                                                <td><%=p.getStock()%></td>
+                                                <td>
+                                                    <form action="agregar-producto-proforma?idProducto=<%=p.getIdProducto()%>"
+                                                          method="POST">
+                                                        <button
+                                                            type="button"
+                                                            data-bs-toggle="modal" data-bs-target="#modal-<%=p.getIdProducto()%>"
+                                                            class="btn btn-primary">
+                                                            Agregar a proforma
+                                                        </button>
+                                                        <div class="modal fade"
+                                                             id="modal-<%=p.getIdProducto()%>"
+                                                             tabindex="-1"
+                                                             aria-labelledby="exampleModalLabel"
+                                                             aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">
+                                                                            <%=p.getNombre()%>
+                                                                        </h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label>Cantidad</label>
+                                                                            <input
+                                                                                type="number"
+                                                                                name="cantidad"
+                                                                                class="form-control"
+                                                                                required/>
+                                                                        </div>
+                                                                        <div class="form-group mb-2">
+                                                                            <label>Precio</label>
+                                                                            <select name="precio" class="form-control">
+                                                                                <% for (Precio prec : p.getPrecios()) {%>
+                                                                                <option value="<%=prec.getIdPrecio()%>">
+                                                                                    S/. <%=prec.getPrecioUnitario()%> | Factor: <%=prec.getFactor()%>
+                                                                                </option>
+                                                                                <% } %>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                            Cancelar
+                                                                        </button>
+                                                                        <button class="btn btn-primary">
+                                                                            Agregar
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mt-2">
+                            <div class="card-header">
+                                <h4>
+                                    Productos a proformar
+                                </h4>
+                            </div>
+                            <section class="card-body">
+                                <% if (productosProforma != null && !productosProforma.isEmpty()) { %>
+                                <ul class="p-0">
+                                    <% for (ProductoProformado p : productosProforma) {%>
+                                    <li class="card mb-2">
+                                        <div class="card-body">
+                                            <header class="d-flex justify-content-between">
+                                                <h5>
+                                                    <%=p.getNombre()%>
+                                                </h5>
+                                                <a href="remover-producto-proforma?idProducto=<%=p.getIdProducto()%>"
+                                                   class="btn btn-danger">
+                                                    X
+                                                </a>
+                                            </header>
+                                            <p>
+                                                <%=p.getDescripcion()%>
+                                            </p>
+                                            <span class="badge bg-success">
+                                                Precio: S/. <%=p.getPrecioUnitario()%>
+                                            </span>
+                                            <span class="badge bg-danger">
+                                                IGV: S/. <%=p.getIgv()%>
+                                            </span>
+                                            <span class="badge bg-warning">
+                                                Cantidad: <%=p.getCantidad()%>
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <% } %>
+                                </ul>
+                                <hr />
+                                <%
+                                    float subTotal = 0;
+                                    float igvTotal = 0;
+                                    for (ProductoProformado p : productosProforma) {
+                                        subTotal += (p.getPrecioUnitario() * p.getCantidad());
+                                        igvTotal += p.getIgv();
+                                    }
+                                    float total = subTotal + igvTotal;
+                                %>
+                                <div class="row">
+                                    <div class="col-9">
+                                        Subtotal
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        S/. <%=subTotal%>
+                                    </div>
+                                    <div class="col-9">
+                                        IGV
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        S/. <%=igvTotal%>
+                                    </div>
+                                    <div class="col-9">
+                                        <b>Precio Total</b>
+                                    </div>
+                                    <div class="col-3 text-end">
+                                        S/. <%=String.format("%.02f", total)%>
+                                    </div>
+                                </div>
+                                <hr />
+                                <button
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modal-proforma"
+                                    class="btn btn-success w-100">
+                                    Realizar proforma
+                                </button>
+                                <div class="modal fade"
+                                     id="modal-proforma"
+                                     tabindex="-1"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <form action="emitir-proforma" method="POST">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">
+                                                        Proforma
+                                                    </h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close">
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group mb-2">
+                                                        <label>Nombre Referencial</label>
+                                                        <input
+                                                            type="text"
+                                                            name="nombre-referencial"
+                                                            class="form-control"
+                                                            required/>
+                                                    </div>
+                                                    <label>Productos proformados</label>
+                                                    <table class="table">
+                                                        <thead class="table-dark">
+                                                            <tr>
+                                                                <th>Cod. Barras</th>
+                                                                <th>Nombre</th>
+                                                                <th>Descripción</th>
+                                                                <th>Precio Unitario</th>
+                                                                <th>Cantidad</th>
+                                                                <th>IGV</th>
+                                                                <th>Subtotal</th>
+                                                                <th>Total + IGV</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% for (ProductoProformado p : productosProforma) {%>
+                                                            <%
+                                                                float subtotalProducto = p.getCantidad() * p.getPrecioUnitario();
+                                                                float totalProducto = subtotalProducto * p.getIgv();
+                                                            %>
+                                                            <tr>
+                                                                <td><%=p.getCodBarras()%></td>
+                                                                <td><%=p.getNombre()%></td>
+                                                                <td><%=p.getDescripcion()%></td>
+                                                                <td class="text-end"><%=p.getPrecioUnitario()%></td>
+                                                                <td class="text-end"><%=p.getCantidad()%></td>
+                                                                <td class="text-end">
+                                                                    <%=p.getIgv()%>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <%=String.format("%.02f", subtotalProducto)%>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <%=String.format("%.02f", totalProducto)%>
+                                                                </td>
+                                                            </tr>
+                                                            <% }%>
+                                                            <tr>
+                                                                <td colspan="6" class="text-end">
+                                                                    <%=String.format("%.02f", subTotal)%>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <%=String.format("%.02f", igvTotal)%>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <%=String.format("%.02f", total)%>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="7" class="text-end">
+                                                                    <b>Precio Total</b>
+                                                                </td>
+                                                                <td class="text-end">
+                                                                    <b>
+                                                                        <%=String.format("%.02f", total)%>
+                                                                    </b>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        Cancelar
+                                                    </button>
+                                                    <button class="btn btn-primary">
+                                                        Realizar proforma
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } else { %>
+                                <div class="alert alert-warning">
+                                    Sin productos
+                                </div>
+                                <% }%>
+                            </section>
                         </div>
                     </div>
                 </div>
-                <%}%>
-                <%if (productosEquivalentes != null) { %>
-                <h2 class="mt-2 mb-2">Productos similares</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Nombre</th>
-                                        <th>Marca</th>
-                                        <th>Descripción</th>
-                                        <th>Stock</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (Producto p : productosEquivalentes) {%>
-                                    <tr>
-                                        <td><%=p.getIdProducto()%></td>
-                                        <td><%=p.getNombre()%></td>
-                                        <td><%=p.getMarca()%></td>
-                                        <td><%=p.getDescripcion()%></td>
-                                        <td><%=p.getStock()%></td>
-                                        <td>
-                                            <button data-id="<%=p.getIdProducto()%>"
-                                                    type="button"
-                                                    class="btn btn-primary">
-                                                Agregar a proforma
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% }%>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <%}%>
             </section>
         </main>
     </body>
