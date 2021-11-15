@@ -1,115 +1,234 @@
-<%-- 
-    Document   : agregar
-    Created on : 13-nov-2021, 0:25:24
-    Author     : Administrador
---%>
-
+<%@page import="com.untels.zenidscrum.modelo.bean.Precio"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Proveedor"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Producto"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Privilegio"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Rol"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Agregar Producto</title>
+        <title>Producto</title>
         <%@ include file="../layout/estilos.jsp" %>
-        <!-- Compressed CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.3/dist/css/foundation.min.css" crossorigin="anonymous">
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-        <!--Compressed JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.3/dist/js/foundation.min.js" crossorigin="anonymous"></script>
     </head>
     <body>
-        <%@ include file="../layout/navegacion.jsp" %> 
-        
-        <main  style="display: inline;float: left;width: 85%" >
-            
-            <div  id=imagen >
-            <img src="C:\Users\Administrador\Downloads\logo.jpg"  > 
-         </div>
-
-        <div  id=contenedor  >
-             <h1>PRODUCTO</h1>
-
-             <div class="divididos">
-                <!-- <div class="inp">
-                    <label for="idprod">Id_producto</label>
-                    <br>
-                    <input width="10px" type="text" id="idprod" class="form-control"/>
-                </div> -->
-                    
-                <div class="inp">
-                    <label for="nombre">Nombre</label>
-                    <br>
-                    <input width="10px" type="text" id="nombre" class="form-control"/>
+        <main>
+            <%@ include file="../layout/navegacion.jsp" %>
+            <%                Producto prod = (Producto) request.getAttribute("producto");
+                boolean edicion = prod != null;
+                List<Proveedor> proveedores = (ArrayList<Proveedor>) request.getAttribute("proveedores");
+                String mensaje = (String) request.getAttribute("mensaje");
+            %>
+            <%@ include file="../layout/barra-lateral.jsp" %>
+            <section id="main">
+                <h1>
+                    <% if (edicion) { %>
+                    Editar Producto
+                    <% } else { %>
+                    Nuevo Producto
+                    <% } %>
+                </h1>
+                <div class="card">
+                    <div class="card-body">
+                        <form
+                            <% if (edicion) {%>
+                            action="modificar-producto?idProducto=<%=prod.getIdProducto()%>"
+                            <% } else { %>
+                            action="crear-producto"
+                            <% } %>
+                            method="POST">
+                            <div class="row">
+                                <div class="form-group mb-2 col-md-6">
+                                    <label>Nombre</label>
+                                    <input
+                                        type="text"
+                                        name="nombre"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getNombre()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-6">
+                                    <label>Cod. Barras</label>
+                                    <input
+                                        type="text"
+                                        name="cod-barras"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getCodBarras()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2">
+                                    <label>Descripción</label>
+                                    <textarea
+                                        name="descripción"
+                                        class="form-control"
+                                        rows="3"
+                                        required><%if (edicion) {%><%=prod.getDescripcion()%><%}%></textarea>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Marca</label>
+                                    <input
+                                        type="text"
+                                        name="marca"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getMarca()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Familia</label>
+                                    <input
+                                        type="text"
+                                        name="familia"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getFamilia()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Línea</label>
+                                    <input
+                                        type="text"
+                                        name="linea"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getLinea()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Stock</label>
+                                    <input
+                                        type="number"
+                                        name="stock"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getStock()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Stock Mínimo</label>
+                                    <input
+                                        type="number"
+                                        name="stock-minimo"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getStockMinimo()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>IGV</label>
+                                    <input
+                                        type="number"
+                                        name="igv"
+                                        step="any"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getIgv()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label>Proveedor</label>
+                                    <select name="proveedor" class="form-control">
+                                        <% for (Proveedor p : proveedores) {%>
+                                        <option value="<%=p.getIdProveedor()%>"
+                                                <% if (edicion && prod.getProveedor().getIdProveedor() == p.getIdProveedor()) { %>
+                                                selected
+                                                <% }%>>
+                                            <%=p.getNombre()%>
+                                        </option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                                <hr/>
+                                <h2>Precios</h2>
+                                <div class="row">
+                                    <div class="form-group mb-2 col-md-3">
+                                        <label>Precio Unitario</label>
+                                        <input
+                                            type="number"
+                                            name="punit"
+                                            step="any"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group mb-2 col-md-3">
+                                        <label>Cantidad</label>
+                                        <input
+                                            type="number"
+                                            name="pcantidad"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group mb-2 col-md-3">
+                                        <label>Factor</label>
+                                        <input
+                                            type="number"
+                                            name="pfactor"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group mb-2 col-md-3 pt-2">
+                                        <button type="button" class="btn btn-warning w-100">
+                                            Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="table-dark text-center">
+                                        <tr>
+                                            <th>Precio Unit.</th>
+                                            <th>Cantidad</th>
+                                            <th>Factor</th>
+                                            <th>Remover</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (edicion) { %>
+                                        <% for (Precio prec : prod.getPrecios()) {%>
+                                        <tr>
+                                            <td>
+                                                <%=prec.getPrecioUnitario()%>
+                                                <input type="hidden"
+                                                       name="punit-<%=prec.getIdPrecio()%>"
+                                                       value="<%=prec.getPrecioUnitario()%>" />
+                                            </td>
+                                            <td>
+                                                <%=prec.getCantidad()%>
+                                                <input type="hidden"
+                                                       name="pcantidad-<%=prec.getIdPrecio()%>"
+                                                       value="<%=prec.getCantidad()%>" />
+                                            </td>
+                                            <td>
+                                                <%=prec.getFactor()%>
+                                                <input type="hidden"
+                                                       name="pfactor-<%=prec.getIdPrecio()%>"
+                                                       value="<%=prec.getFactor()%>" />
+                                            </td>
+                                            <td>
+                                                <button type="button"
+                                                        data-id="<%=prec.getIdPrecio()%>"
+                                                        class="btn btn-danger">
+                                                    Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% if (edicion) { %>
+                            <button class="btn btn-success">
+                                Modificar
+                            </button>
+                            <% } else { %>
+                            <button class="btn btn-primary">
+                                Guardar
+                            </button>
+                            <% } %>
+                        </form>
+                        <% if (mensaje != null) {%>
+                        <div class="alert alert-danger">
+                            <%=mensaje%>
+                        </div>
+                        <% }%>
+                    </div>
                 </div>
-
-                <div class="inp" >
-                    <label for="familia">Familia</label>
-                    <br>
-                    <input width="20px" type="text" id="familia" class="form-control"/>
-                </div>
-    
-                <div class="inp" >
-                    <label for="linea">Linea</label>
-                    <br>
-                    <input width="20px" type="text" id="linea" class="form-control"/>
-                </div>
-    
-                <div class="inp">
-                    <label for="unimed">Unidad de medida</label>
-                    <br>
-                    <input width="20px" type="text" id="unimed" class="form-control"/>
-                </div>
-
-            </div>
-
-
-            <div class="divididos" id="ee">
-
-                <div class="inp" >
-                    <label for="proveedor">Proveedor</label>
-                    <br>
-                    <input width="20px" type="text" id="proveedor" class="form-control"/>
-                </div>
-
-                <div class="inp">
-                    <label for="marca">Marca</label>
-                    <div class="input-group mb-3">
-                        <select class="form-select" id="inputGroupSelect01">
-                          <option selected>Elige</option>
-                          <option value="1">Faber Castell</option>
-                          <option value="2">Layconsa</option>
-                          <option value="3">Stanford</option>
-                        </select>
-                      </div>
-                    <!-- <br>
-                    <input width="20px" type="text" id="marca" class="form-control"/> -->
-                </div>
-                
-                <div class="inp" style="margin-top:-16px ;">
-                    <label for="sto">Stock</label>
-                    <br>
-                    <input width="20px" type="text" id="sto" class="form-control"/>
-                </div>
-
-
-            </div>
-
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" type="button">REGISTRAR</button>
-                <br> 
-            </div>
-            
-            <!-- <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" type="button">VER LISTA</button>
-                <br> 
-            </div> -->
-            
-
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-            
+            </section>
         </main>
     </body>
 </html>
