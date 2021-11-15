@@ -11,74 +11,79 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Usuarios</title>
-        <%@ include file="../layout/estilos.jsp" %> 
+        <%@ include file="../layout/estilos.jsp" %>
     </head>
     <body>
-        <%@ include file="../layout/navegacion.jsp" %> 
-        <%
-            Privilegio prvModUsuario = usuario
-                    .getRol()
-                    .getPrivilegioPorNombre("USUARIOS");
-        %>
-        <main class="container">
-            <div class="card">
-                <div class="card-body">
-                    <% if (prvModUsuario.isListar()) { %>
-                    <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Correo electrónico</th>
-                                <th>Rol</th>
-                                <th>
-                                    <% if (prvModUsuario.isCrear()) { %>
-                                    <a href="formulario-usuario" class="btn btn-primary">
-                                        Nuevo
-                                    </a>
+        <main>
+            <%@ include file="../layout/navegacion.jsp" %>
+            <%            Privilegio prvModUsuario = usuario
+                        .getRol()
+                        .getPrivilegioPorNombre("USUARIOS");
+            %>
+            <%@ include file="../layout/barra-lateral.jsp" %>
+            <section id="main">
+                <h1>Usuarios</h1>
+                <div class="card">
+                    <div class="card-body">
+                        <% if (prvModUsuario.isListar()) { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Nombre</th>
+                                        <th>Correo electrónico</th>
+                                        <th>Rol</th>
+                                        <th>
+                                            <% if (prvModUsuario.isCrear()) { %>
+                                            <a href="formulario-usuario" class="btn btn-primary">
+                                                Nuevo
+                                            </a>
+                                            <% } %>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for (Usuario u : usuarios) {%>
+                                    <tr>
+                                        <td><%=u.getIdUsuario()%></td>
+                                        <td><%=u.getNombre()%></td>
+                                        <td><%=u.getCorreoElectronico()%></td>
+                                        <td><%=u.getRol().getNombre()%></td>
+                                        <td>
+                                            <% if (prvModUsuario.isActualizar()) {%>
+                                            <a href="formulario-usuario?idUsuario=<%=u.getIdUsuario()%>"
+                                               class="btn btn-warning">
+                                                Editar
+                                            </a>
+                                            <% } %>
+                                            <% if (prvModUsuario.isEliminar()) { %>
+                                            <% if (u.isHabilitado()) {%>
+                                            <a href="inhabilitar-usuario?idUsuario=<%=u.getIdUsuario()%>"
+                                               class="btn btn-danger">
+                                                Inhabilitar
+                                            </a>
+                                            <% } else {%>
+                                            <a href="habilitar-usuario?idUsuario=<%=u.getIdUsuario()%>"
+                                               class="btn btn-dark">
+                                                Habilitar
+                                            </a>
+                                            <% } %>
+                                            <% } %>
+                                        </td>
+                                    </tr>
                                     <% } %>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (Usuario u:usuarios) { %>
-                            <tr>
-                                <td><%=u.getIdUsuario()%></td>
-                                <td><%=u.getNombre()%></td>
-                                <td><%=u.getCorreoElectronico()%></td>
-                                <td><%=u.getRol().getNombre()%></td>
-                                <td>
-                                    <% if (prvModUsuario.isActualizar()) { %>
-                                    <a href="formulario-usuario?idUsuario=<%=u.getIdUsuario()%>" 
-                                       class="btn btn-warning">
-                                        Editar
-                                    </a>
-                                    <% } %>
-                                    <% if (prvModUsuario.isEliminar()) { %>
-                                        <% if (u.isHabilitado()) { %>
-                                        <a href="inhabilitar-usuario?idUsuario=<%=u.getIdUsuario()%>" 
-                                           class="btn btn-danger">
-                                            Inhabilitar
-                                        </a>
-                                        <% } else { %>
-                                        <a href="habilitar-usuario?idUsuario=<%=u.getIdUsuario()%>" 
-                                           class="btn btn-dark">
-                                            Habilitar
-                                        </a>
-                                        <% } %>
-                                    <% } %>
-                                </td>
-                            </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
-                    <% } else { %>
-                    <div class="alert alert-danger">
-                        No tiene acceso
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                        <div class="alert alert-danger">
+                            No tiene acceso
+                        </div>
+                        <% }%>
                     </div>
-                    <% } %>
                 </div>
-            </div>
+            </section>
         </main>
     </body>
 </html>
