@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.untels.zenidscrum.modelo.bean;
 
-/**
- *
- * @author Administrador
- */
+import java.util.List;
+
 public class Proveedor {
-    
+
     private int idProveedor;
     private String nombre;
     private String ruc;
@@ -19,6 +12,7 @@ public class Proveedor {
     private int idRepresentante;
     private boolean habilitado;
     private Representante representante;
+    private List<Vendedor> vendedores;
 
     public Representante getRepresentante() {
         return representante;
@@ -26,6 +20,14 @@ public class Proveedor {
 
     public void setRepresentante(Representante representante) {
         this.representante = representante;
+    }
+
+    public List<Vendedor> getVendedores() {
+        return vendedores;
+    }
+
+    public void setVendedores(List<Vendedor> vendedores) {
+        this.vendedores = vendedores;
     }
 
     public int getIdProveedor() {
@@ -83,5 +85,5 @@ public class Proveedor {
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
-    
+
 }
