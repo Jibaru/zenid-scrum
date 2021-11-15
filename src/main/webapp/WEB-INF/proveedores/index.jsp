@@ -73,7 +73,7 @@
                 <th scope="col" style="text-align: center;">Telefono</th>
                 <th scope="col" style="text-align: center;">Correo</th>
                 <th scope="col" style="text-align: center;">Representante</th>
-                <th scope="col" style="text-align: center;"><a href="NuevoProv" ><button type="button" class="btn btn-primary" >Nuevo</button></a></th>
+                <th scope="col" style="text-align: center;"><a href="ProveedorNu_ed" ><button type="button" class="btn btn-primary" >Nuevo</button></a></th>
                 
               </tr>
             </thead>

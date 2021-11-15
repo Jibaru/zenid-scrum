@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(
         name = "Proveedor", 
-        urlPatterns = {"/Proveedor","/fproveedor"})
+        urlPatterns = {"/Proveedor","/fproveedor","/ProveedorNu_ed"})
 
 public class ProveedorServlet extends HttpServlet {
     private final  ProveedorDAO proveedordao;
@@ -51,6 +51,11 @@ public class ProveedorServlet extends HttpServlet {
                 
                 listar(request, response);
                 request.getRequestDispatcher("WEB-INF/proveedores/index.jsp").forward(request, response);
+            }
+            if (path.equals("/ProveedorNu_ed")) {
+                
+                
+            request.getRequestDispatcher("WEB-INF/proveedores/formulario.jsp").forward(request, response);
 
             }
             
