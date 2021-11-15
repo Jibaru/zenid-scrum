@@ -10,4 +10,6 @@ public interface ProductoDAO {
     public List<Producto> buscarEquivalentes(String termino, String marca, Integer idProveedor);
 
     public List<Producto> listarTodos();
+
+    public Producto obtenerPorId(int idProducto);
 }
