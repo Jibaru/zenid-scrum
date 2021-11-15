@@ -79,7 +79,6 @@
                             No tiene acceso
                         </div>
 
-
                         <div class="alert alert-danger">
 
                         </div>

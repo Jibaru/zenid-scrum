@@ -14,22 +14,6 @@ public class Proveedor {
     private Representante representante;
     private List<Vendedor> vendedores;
 
-    public Representante getRepresentante() {
-        return representante;
-    }
-
-    public void setRepresentante(Representante representante) {
-        this.representante = representante;
-    }
-
-    public List<Vendedor> getVendedores() {
-        return vendedores;
-    }
-
-    public void setVendedores(List<Vendedor> vendedores) {
-        this.vendedores = vendedores;
-    }
-
     public int getIdProveedor() {
         return idProveedor;
     }
@@ -84,6 +68,22 @@ public class Proveedor {
 
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
+    }
+
+    public Representante getRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(Representante representante) {
+        this.representante = representante;
+    }
+
+    public List<Vendedor> getVendedores() {
+        return vendedores;
+    }
+
+    public void setVendedores(List<Vendedor> vendedores) {
+        this.vendedores = vendedores;
     }
 
 }
