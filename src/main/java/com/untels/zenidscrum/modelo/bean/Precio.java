@@ -6,7 +6,7 @@ public class Precio {
     private float precioUnitario;
     private int cantidad;
     private int factor;
-    private int idProducto;
+    private String unidad;
 
     public int getIdPrecio() {
         return idPrecio;
@@ -40,12 +40,12 @@ public class Precio {
         this.factor = factor;
     }
 
-    public int getIdProducto() {
-        return idProducto;
+    public String getUnidad() {
+        return unidad;
     }
 
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
     }
 
 }
