@@ -1,8 +1,6 @@
 package com.untels.zenidscrum.modelo.dao;
 
 import com.untels.zenidscrum.acceso.datos.Conexion;
-import com.untels.zenidscrum.modelo.bean.Privilegio;
-import com.untels.zenidscrum.modelo.bean.Rol;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLMarcaDAO implements MarcaDAO{
-    
-    
+public class SQLMarcaDAO implements MarcaDAO {
+
     private final Conexion conexion;
 
     public SQLMarcaDAO(Conexion conexion) {
@@ -21,16 +18,14 @@ public class SQLMarcaDAO implements MarcaDAO{
 
     @Override
     public List<String> listarTodos() {
-        String sql = "SELECT DISTINCT marca FROM `producto`";
-        
+        String sql = "SELECT DISTINCT marca FROM `productos`";
+
         Connection conn = conexion.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         List<String> marca = new ArrayList<>();
-        
-        
-        
+
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery(sql);
@@ -64,8 +59,8 @@ public class SQLMarcaDAO implements MarcaDAO{
                 }
             }
         }
-        
+
         return marca;
-        
+
     }
 }
