@@ -35,8 +35,7 @@ public class EmitirProformaServlet extends HttpServlet {
         this.proveedorDAO = new SQLProveedorDAO(new SQLConexion());
         this.productoDAO = new SQLProductoDAO(new SQLConexion());
     }
-   
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -103,41 +102,42 @@ public class EmitirProformaServlet extends HttpServlet {
             HttpServletResponse response
     ) throws ServletException, IOException {
 
-        List<String> marca = marcaDAO.listarTodos();
-        request.setAttribute("marcas", marca);
+        List<String> marcas = marcaDAO.listarTodos();
+        request.setAttribute("marcas", marcas);
 
-        List<Proveedor> proveedor = proveedorDAO.listarTodos();
-        request.setAttribute("proveedores", proveedor);
-        
+        List<Proveedor> proveedores = proveedorDAO.listarTodos();
+        request.setAttribute("proveedores", proveedores);
 
         request.getRequestDispatcher("WEB-INF/emitir-proforma/index.jsp")
                 .forward(request, response);
     }
 
-    private void buscarProductoProforma(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    private void buscarProductoProforma(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+
         String nombre = request.getParameter("nombre");
         String marca = request.getParameter("marca");
         String idproveedor = request.getParameter("idproveedor");
-        
-        System.out.println(nombre);
-        System.out.println(marca);
-        System.out.println(idproveedor);
-        
-        Integer idProv = idproveedor != null && idproveedor.isEmpty() ? null:Integer.parseInt(idproveedor);
-        
+
+        Integer idProv = null;
+
+        if (idproveedor != null && !idproveedor.isEmpty()) {
+            idProv = Integer.parseInt(idproveedor);
+        }
+
         List<Producto> producto = productoDAO.buscar(nombre, marca, idProv);
         request.setAttribute("productos", producto);
-        
+
         List<Producto> productosEquivalentes = productoDAO.buscarEquivalentes(nombre, marca, idProv);
         request.setAttribute("productosEquivalentes", productosEquivalentes);
-        
+
         List<String> marcas = marcaDAO.listarTodos();
         request.setAttribute("marcas", marcas);
 
         List<Proveedor> proveedor = proveedorDAO.listarTodos();
         request.setAttribute("proveedores", proveedor);
-        
 
         request.getRequestDispatcher("WEB-INF/emitir-proforma/index.jsp")
                 .forward(request, response);
