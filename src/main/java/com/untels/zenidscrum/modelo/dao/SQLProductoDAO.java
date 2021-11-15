@@ -1,6 +1,7 @@
 package com.untels.zenidscrum.modelo.dao;
 
 import com.untels.zenidscrum.acceso.datos.Conexion;
+import com.untels.zenidscrum.modelo.bean.Precio;
 import com.untels.zenidscrum.modelo.bean.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,8 +46,8 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement ps = null, ps2 = null;
+        ResultSet rs = null, rs2 = null;
         List<Producto> productos = new ArrayList<>();
 
         try {
@@ -57,9 +58,7 @@ public class SQLProductoDAO implements ProductoDAO {
             if (idProveedor != null) {
                 ps.setString(1, idProveedor.toString());
             }*/
-
-            System.out.println(sql);
-            rs = ps.executeQuery(sql);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 Producto p = new Producto();
@@ -75,6 +74,23 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStockMinimo(rs.getInt("stock_minimo"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
+                String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
+                ps2 = conn.prepareStatement(sql2);
+                ps2.setInt(1, p.getIdProducto());
+
+                rs2 = ps2.executeQuery();
+                List<Precio> precios = new ArrayList<>();
+                while (rs2.next()) {
+                    Precio precio = new Precio();
+                    precio.setIdPrecio(rs2.getInt("id_precio"));
+                    precio.setCantidad(rs2.getInt("cantidad"));
+                    precio.setFactor(rs2.getInt("factor"));
+                    precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
+                    precio.setUnidad(rs2.getString("unidad"));
+                    precios.add(precio);
+                }
+                p.setPrecios(precios);
+
                 productos.add(p);
             }
 
@@ -88,9 +104,23 @@ public class SQLProductoDAO implements ProductoDAO {
                     System.out.println(ex);
                 }
             }
+            if (ps2 != null) {
+                try {
+                    ps2.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
             if (rs != null) {
                 try {
                     rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs2 != null) {
+                try {
+                    rs2.close();
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 }
@@ -135,8 +165,8 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        PreparedStatement ps = null, ps2 = null;
+        ResultSet rs = null, rs2 = null;
         List<Producto> productos = new ArrayList<>();
 
         try {
@@ -148,8 +178,97 @@ public class SQLProductoDAO implements ProductoDAO {
                 ps.setString(1, idProveedor.toString());
             }*/
 
-            System.out.println(sql);
-            rs = ps.executeQuery(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setIdProducto(rs.getInt("id_producto"));
+                p.setNombre(rs.getString("nombre"));
+                p.setCodBarras(rs.getString("cod_barras"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setMarca(rs.getString("marca"));
+                p.setFamilia(rs.getString("familia"));
+                p.setLinea(rs.getString("linea"));
+                p.setStock(rs.getInt("stock"));
+                p.setIgv(rs.getFloat("igv"));
+                p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setHabilitado(rs.getBoolean("habilitado"));
+
+                String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
+                ps2 = conn.prepareStatement(sql2);
+                ps2.setInt(1, p.getIdProducto());
+
+                rs2 = ps2.executeQuery();
+                List<Precio> precios = new ArrayList<>();
+                while (rs2.next()) {
+                    Precio precio = new Precio();
+                    precio.setIdPrecio(rs2.getInt("id_precio"));
+                    precio.setCantidad(rs2.getInt("cantidad"));
+                    precio.setFactor(rs2.getInt("factor"));
+                    precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
+                    precio.setUnidad(rs2.getString("unidad"));
+                    precios.add(precio);
+                }
+                p.setPrecios(precios);
+
+                productos.add(p);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (ps2 != null) {
+                try {
+                    ps2.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs2 != null) {
+                try {
+                    rs2.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return productos;
+    }
+
+    @Override
+    public List<Producto> listarTodos() {
+        String sql = "SELECT * FROM productos";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 Producto p = new Producto();
@@ -198,20 +317,21 @@ public class SQLProductoDAO implements ProductoDAO {
     }
 
     @Override
-    public List<Producto> listarTodos() {
-        String sql = "SELECT * FROM productos";
+    public Producto obtenerPorId(int idProducto) {
+        String sql = "SELECT * FROM productos WHERE id_producto = ?";
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<Producto> productos = new ArrayList<>();
+        PreparedStatement ps = null, ps2 = null;
+        ResultSet rs = null, rs2 = null;
+        Producto p = null;
 
         try {
             ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery(sql);
+            ps.setInt(1, idProducto);
+            rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Producto p = new Producto();
+            if (rs.next()) {
+                p = new Producto();
                 p.setIdProducto(rs.getInt("id_producto"));
                 p.setNombre(rs.getString("nombre"));
                 p.setCodBarras(rs.getString("cod_barras"));
@@ -224,7 +344,22 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStockMinimo(rs.getInt("stock_minimo"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
-                productos.add(p);
+                String sql2 = "SELECT * FROM precios WHERE id_producto = ?";
+
+                ps2 = conn.prepareStatement(sql2);
+                ps2.setInt(1, idProducto);
+                rs2 = ps2.executeQuery();
+                List<Precio> precios = new ArrayList<>();
+                while (rs2.next()) {
+                    Precio precio = new Precio();
+                    precio.setIdPrecio(rs2.getInt("id_precio"));
+                    precio.setCantidad(rs2.getInt("cantidad"));
+                    precio.setFactor(rs2.getInt("factor"));
+                    precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
+                    precio.setUnidad(rs2.getString("unidad"));
+                    precios.add(precio);
+                }
+                p.setPrecios(precios);
             }
 
         } catch (SQLException ex) {
@@ -237,9 +372,23 @@ public class SQLProductoDAO implements ProductoDAO {
                     System.out.println(ex);
                 }
             }
+            if (ps2 != null) {
+                try {
+                    ps2.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
             if (rs != null) {
                 try {
                     rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs2 != null) {
+                try {
+                    rs2.close();
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 }
@@ -253,6 +402,6 @@ public class SQLProductoDAO implements ProductoDAO {
             }
         }
 
-        return productos;
+        return p;
     }
 }
