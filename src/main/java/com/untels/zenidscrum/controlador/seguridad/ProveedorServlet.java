@@ -5,20 +5,31 @@
  */
 package com.untels.zenidscrum.controlador.seguridad;
 
+import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Administrador
- */
-@WebServlet(name = "Proveedor", urlPatterns = {"/Proveedor","/fproveedor"})
-public class Proveedor extends HttpServlet {
+
+@WebServlet(
+        name = "Proveedor", 
+        urlPatterns = {"/Proveedor","/fproveedor"})
+
+public class ProveedorServlet extends HttpServlet {
+    private final  ProveedorDAO proveedordao;
+    
+    public ProveedorServlet(){
+        SQLConexion conexion = new SQLConexion();
+    this.proveedordao = new SQLProveedorDAO(conexion);
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,8 +48,8 @@ public class Proveedor extends HttpServlet {
             String path = request.getServletPath();
             
             if (path.equals("/fproveedor")) {
-          
-
+                
+                listar(request, response);
                 request.getRequestDispatcher("WEB-INF/proveedores/index.jsp").forward(request, response);
 
             }
@@ -85,5 +96,18 @@ public class Proveedor extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    private void listar(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        List<Proveedor> proveedores = proveedordao.listarTodos();
 
+        request.setAttribute("proveedores", proveedores);
+
+        request.getRequestDispatcher("WEB-INF/proveedores/index.jsp")
+                .forward(request, response);
+    }
+
+    
 }

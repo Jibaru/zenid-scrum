@@ -4,7 +4,13 @@
     Author     : Administrador
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.untels.zenidscrum.modelo.bean.Proveedor"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    List<Proveedor> proveedores = (ArrayList<Proveedor>) request.getAttribute("proveedores");
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +28,7 @@
     <body >
          <%@ include file="../layout/navegacion.jsp" %> 
          
-         <main  style="display: inline;float: left;width: 85%" >
+         <main  style="display: inline;float: left;width: 85%;border: 2px solid #04414d" >
          
          <div style="height: 120px;">
 
@@ -56,41 +62,38 @@
 
           </div>
              
-           <div style="width: 90%;margin: 0 auto;border: 1px solid rgb(138, 132, 132);border-radius: 10px;padding: 10px;box-shadow: 30px 30px 60px 20px rgba(0, 0, 0, 0.2); " >
+           <div style="width: 98%;margin: 0 auto;border: 1px solid rgb(138, 132, 132);border-radius: 10px;padding: 10px;box-shadow: 30px 30px 60px 20px rgba(0, 0, 0, 0.2); " >
 <table class="table caption-top" >
             <caption>List of users</caption>
             <thead class="table-dark" >
               <tr style="text-align: center;">
-                <th scope="col" style="width: 25%;text-align: center;">#</th>
-                <th scope="col" style="width: 25%;text-align: center;">Nombre</th>
-                <th scope="col" style="width: 25%;text-align: center;">Ruc</th>
-                <th scope="col" style="width: 25%;text-align: center;"><button type="button" class="btn btn-primary" style="width: 260px;">Nuevo</button></th>
+                  <th scope="col" style="width: 5%;text-align: center;">#Id</th>
+                <th scope="col" style="text-align: center;">Nombre</th>
+                <th scope="col" style="text-align: center;">Ruc</th>   
+                <th scope="col" style="text-align: center;">Telefono</th>
+                <th scope="col" style="text-align: center;">Correo</th>
+                <th scope="col" style="text-align: center;">Representante</th>
+                <th scope="col" style="text-align: center;"><button type="button" class="btn btn-primary" >Nuevo</button></th>
+                
               </tr>
             </thead>
             <tbody style="text-align: center;">
+                <% for (Proveedor p:proveedores){%>
               <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+                <td><%=p.getIdProveedor()%></td>
+                <td><%=p.getNombre() %></td>
+                <td><%=p.getRuc() %></td>
+                <td><%=p.getTelefono() %></td>
+                <td><%=p.getCorreoElectronico() %></td>
+                <td><%=p.getRuc() %></td>
                 <td><button type="button" style="margin-right: 10px;" class="btn btn-warning">Editar</button><button type="button" class="btn btn-danger">Inhabilitar</button></td>
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td><button type="button" style="margin-right: 10px;" class="btn btn-warning">Editar</button><button type="button" class="btn btn-danger">Inhabilitar</button></td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td><button type="button" style="margin-right: 10px;" class="btn btn-warning">Editar</button><button type="button" class="btn btn-danger">Inhabilitar</button></td>
-              </tr>
+              <%}%>
+              
             </tbody>
           </table>
           </div>
-          
-
+       
          <!-- <div id="espbotones">
             <button type="button" class="btn btn-primary">Nuevo</button>
             <button type="button" class="btn btn-primary">Editar</button>

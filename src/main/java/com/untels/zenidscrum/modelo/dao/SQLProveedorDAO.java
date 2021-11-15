@@ -2,6 +2,7 @@ package com.untels.zenidscrum.modelo.dao;
 
 import com.untels.zenidscrum.acceso.datos.Conexion;
 import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.bean.Representante;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,13 +20,13 @@ public class SQLProveedorDAO implements ProveedorDAO {
 
     @Override
     public List<Proveedor> listarTodos() {
-        String sql = "SELECT * FROM proveedor";
+        String sql = "SELECT p.id_proveedor,p.nombre,p.ruc,p.telefono, p.correo_electronico, p.id_representante, p.habilitado,r.nombre from proveedor p INNER JOIN representante r on p.id_representante = r.id_representante";
 
         Connection conn = conexion.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Proveedor> proveedores = new ArrayList<>();
-
+        
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery(sql);
