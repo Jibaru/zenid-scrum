@@ -6,5 +6,11 @@ import java.util.List;
 public interface ProveedorDAO {
 
     public List<Proveedor> listarTodos();
+    
+     public Proveedor obtenerPorId(int idProveedor);
+
+    public boolean crear(Proveedor proveedor);
+
+    public boolean modificar(Proveedor proveedor);
        
 }

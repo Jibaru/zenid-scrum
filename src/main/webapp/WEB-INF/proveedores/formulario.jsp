@@ -55,7 +55,7 @@
                         <div class="form-group mb-2">
                             <label>Telefono</label>
                             <input 
-                                type="number" 
+                                type="text" 
                                 name="correo-electronico" 
                                 class="form-control" 
                                 
