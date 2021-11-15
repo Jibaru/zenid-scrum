@@ -23,7 +23,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 <!--Compressed JavaScript -->
- <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.3/dist/js/foundation.min.js" crossorigin="anonymous"></script>
+ <!--<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.3/dist/js/foundation.min.js" crossorigin="anonymous"></script>-->
     </head>
     <body >
          <%@ include file="../layout/navegacion.jsp" %> 
@@ -73,7 +73,7 @@
                 <th scope="col" style="text-align: center;">Telefono</th>
                 <th scope="col" style="text-align: center;">Correo</th>
                 <th scope="col" style="text-align: center;">Representante</th>
-                <th scope="col" style="text-align: center;"><button type="button" class="btn btn-primary" >Nuevo</button></th>
+                <th scope="col" style="text-align: center;"><a href="NuevoProv" ><button type="button" class="btn btn-primary" >Nuevo</button></a></th>
                 
               </tr>
             </thead>
@@ -84,8 +84,8 @@
                 <td><%=p.getNombre() %></td>
                 <td><%=p.getRuc() %></td>
                 <td><%=p.getTelefono() %></td>
-                <td><%=p.getCorreoElectronico() %></td>
-                <td><%=p.getRuc() %></td>
+                <td><%=p.getCorreoElectronico()%></td>
+                <td><%=p.getRepresentante().getNombre()%></td>
                 <td><button type="button" style="margin-right: 10px;" class="btn btn-warning">Editar</button><button type="button" class="btn btn-danger">Inhabilitar</button></td>
               </tr>
               <%}%>
@@ -93,7 +93,7 @@
             </tbody>
           </table>
           </div>
-       
+            
          <!-- <div id="espbotones">
             <button type="button" class="btn btn-primary">Nuevo</button>
             <button type="button" class="btn btn-primary">Editar</button>

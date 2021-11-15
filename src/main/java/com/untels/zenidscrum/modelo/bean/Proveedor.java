@@ -18,6 +18,15 @@ public class Proveedor {
     private String telefono;
     private int idRepresentante;
     private boolean habilitado;
+    private Representante representante;
+
+    public Representante getRepresentante() {
+        return representante;
+    }
+
+    public void setRepresentante(Representante representante) {
+        this.representante = representante;
+    }
 
     public int getIdProveedor() {
         return idProveedor;
