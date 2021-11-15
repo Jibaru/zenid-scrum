@@ -1,24 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.untels.zenidscrum.controlador.seguridad;
 
+import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.bean.Producto;
+import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.dao.ProductoDAO;
+import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.SQLProductoDAO;
+import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Administrador
- */
-@WebServlet(name = "ProductoServlet", urlPatterns = {"/ProductoServlet","/agreprproduc"})
+@WebServlet(
+        name = "ProductoServlet",
+        urlPatterns = {
+            "/productos",
+            "/formulario-producto",
+            "/crear-producto",
+            "/modificar-producto",
+            "/inhabilitar-producto",
+            "/habilitar-producto"
+        }
+)
 public class ProductoServlet extends HttpServlet {
+
+    private final ProductoDAO productoDAO;
+    private final ProveedorDAO proveedorDAO;
+
+    public ProductoServlet() {
+        SQLConexion conexion = new SQLConexion();
+        productoDAO = new SQLProductoDAO(conexion);
+        proveedorDAO = new SQLProveedorDAO(conexion);
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,17 +49,27 @@ public class ProductoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-           
-             String path = request.getServletPath();
-            
-            if (path.equals("/agreprproduc")) {
-          
+        String path = request.getServletPath();
 
-                request.getRequestDispatcher("WEB-INF/productos/frmagregar.jsp").forward(request, response);
-
-            }
+        switch (path) {
+            case "/productos":
+                listar(request, response);
+                break;
+            case "/formulario-producto":
+                formulario(request, response);
+                break;
+            case "/crear-producto":
+                crearProducto(request, response);
+                break;
+            case "/modificar-producto":
+                modificarProducto(request, response);
+                break;
+            case "/inhabilitar-producto":
+                inhabilitarProducto(request, response);
+                break;
+            case "/habilitar-producto":
+                habilitarProducto(request, response);
+                break;
         }
     }
 
@@ -84,5 +111,45 @@ public class ProductoServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void listar(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        List<Producto> productos = productoDAO.listarTodos();
+
+        request.setAttribute("productos", productos);
+
+        request.getRequestDispatcher("WEB-INF/productos/index.jsp")
+                .forward(request, response);
+    }
+
+    private void formulario(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        List<Proveedor> proveedores = proveedorDAO.listarTodos();
+
+        request.setAttribute("proveedores", proveedores);
+
+        request.getRequestDispatcher("WEB-INF/productos/formulario.jsp")
+                .forward(request, response);
+    }
+
+    private void crearProducto(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void inhabilitarProducto(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void habilitarProducto(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
