@@ -4,14 +4,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>ZENID</title>
-        
-        <%@ include file="WEB-INF/layout/estilos.jsp" %> 
+
+        <%@ include file="WEB-INF/layout/estilos.jsp" %>
     </head>
     <body>
         <%
             String mensaje = (String) request.getAttribute("mensaje");
         %>
-        <main class="container">
+        <div class="container">
             <div class="card w-50 shadow-sm bg-body rounded" style="margin: 5rem auto">
                 <picture class="text-center">
                     <img src="recursos/img/logo.jpg" class="card-img-top" alt="Logo" style="width: 20rem;">
@@ -29,14 +29,14 @@
                         <div class="text-center mt-2 mb-2">
                             <button class="btn btn-primary">Ingresar</button>
                         </div>
-                        <% if (mensaje != null && !mensaje.isEmpty()) { %>
+                        <% if (mensaje != null && !mensaje.isEmpty()) {%>
                         <div class="alert alert-danger text-center">
                             <%=mensaje%>
                         </div>
-                        <% } %>
+                        <% }%>
                     </form>
                 </div>
             </div>
-        </main>
+        </div>
     </body>
 </html>
