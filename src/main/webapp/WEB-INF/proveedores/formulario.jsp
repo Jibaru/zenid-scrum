@@ -36,8 +36,8 @@
                         <div class="form-group mb-2">
                             <label>RUC</label>
                             <input 
-                                type="email" 
-                                name="correo-electronico" 
+                                type="text" 
+                                name="ruc" 
                                 class="form-control" 
                                 
                                 required>
@@ -55,7 +55,7 @@
                         <div class="form-group mb-2">
                             <label>Telefono</label>
                             <input 
-                                type="email" 
+                                type="number" 
                                 name="correo-electronico" 
                                 class="form-control" 
                                 

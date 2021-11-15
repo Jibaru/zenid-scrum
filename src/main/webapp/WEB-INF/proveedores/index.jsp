@@ -62,7 +62,7 @@
 
           </div>
              
-           <div style="width: 98%;margin: 0 auto;border: 1px solid rgb(138, 132, 132);border-radius: 10px;padding: 10px;box-shadow: 30px 30px 60px 20px rgba(0, 0, 0, 0.2); " >
+           <div style="width: 99%;margin: 0 auto;border: 1px solid rgb(138, 132, 132);border-radius: 10px;padding: 10px;box-shadow: 30px 30px 60px 20px rgba(0, 0, 0, 0.2); " >
 <table class="table caption-top" >
             <caption>List of users</caption>
             <thead class="table-dark" >
@@ -86,7 +86,10 @@
                 <td><%=p.getTelefono() %></td>
                 <td><%=p.getCorreoElectronico()%></td>
                 <td><%=p.getRepresentante().getNombre()%></td>
-                <td><button type="button" style="margin-right: 10px;" class="btn btn-warning">Editar</button><button type="button" class="btn btn-danger">Inhabilitar</button></td>
+                <td><a href="formulario-usuario?idUsuario=<%=p.getIdProveedor()%>" class="btn btn-warning" style="margin-right: 5px" >Editar</a><a href="inhabilitar-usuario?idUsuario=<%=p.getIdProveedor()%>" 
+                                           class="btn btn-danger">
+                                            Inhabilitar
+                                        </a></td>
               </tr>
               <%}%>
               

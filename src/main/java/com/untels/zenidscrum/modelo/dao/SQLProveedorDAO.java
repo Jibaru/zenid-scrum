@@ -51,8 +51,8 @@ public class SQLProveedorDAO implements ProveedorDAO {
                 prov.setIdProveedor(rs.getInt("id_proveedor"));
                 prov.setCorreoElectronico(rs.getString("correo_electronico"));
                 prov.setNombre(rs.getString("nombre"));
-                prov.setRuc(rs.getString("ruc"));
-                prov.setTelefono(rs.getString("telefono"));
+                prov.setRuc(rs.getLong("ruc"));
+                prov.setTelefono(rs.getInt("telefono"));
                 prov.setHabilitado(rs.getBoolean("habilitado"));
                 rep.setIdRepresentante(rs.getInt("id_representante"));
                 rep.setNombre(rs.getString("nombre_representante"));

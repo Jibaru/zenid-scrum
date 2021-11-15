@@ -6,5 +6,5 @@ import java.util.List;
 public interface ProveedorDAO {
 
     public List<Proveedor> listarTodos();
-    
+       
 }
