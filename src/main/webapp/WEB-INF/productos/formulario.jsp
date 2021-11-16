@@ -61,7 +61,7 @@
                                 <div class="form-group mb-2">
                                     <label>Descripción</label>
                                     <textarea
-                                        name="descripción"
+                                        name="descripcion"
                                         class="form-control"
                                         rows="3"
                                         required><%if (edicion) {%><%=prod.getDescripcion()%><%}%></textarea>
@@ -122,6 +122,16 @@
                                         required>
                                 </div>
                                 <div class="form-group mb-2 col-md-4">
+                                    <label>Precio Compra Unitario</label>
+                                    <input
+                                        type="number"
+                                        name="precio-compra-unitario"
+                                        step="any"
+                                        class="form-control"
+                                        value="<%if (edicion) {%><%=prod.getPrecioCompraUnitario()%><%}%>"
+                                        required>
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
                                     <label>Proveedor</label>
                                     <select name="proveedor" class="form-control">
                                         <% for (Proveedor p : proveedores) {%>
@@ -141,7 +151,7 @@
                                         <label>Precio Unitario</label>
                                         <input
                                             type="number"
-                                            name="punit"
+                                            id="pprecio"
                                             step="any"
                                             class="form-control">
                                     </div>
@@ -149,18 +159,27 @@
                                         <label>Cantidad</label>
                                         <input
                                             type="number"
-                                            name="pcantidad"
+                                            id="pcantidad"
                                             class="form-control">
                                     </div>
                                     <div class="form-group mb-2 col-md-3">
                                         <label>Factor</label>
                                         <input
                                             type="number"
-                                            name="pfactor"
+                                            id="pfactor"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group mb-2 col-md-3">
+                                        <label>Unidad</label>
+                                        <input
+                                            type="text"
+                                            id="puni"
                                             class="form-control">
                                     </div>
                                     <div class="form-group mb-2 col-md-3 pt-2">
-                                        <button type="button" class="btn btn-warning w-100">
+                                        <button id="btn-agregar-precio"
+                                                type="button"
+                                                class="btn btn-warning w-100">
                                             Agregar
                                         </button>
                                     </div>
@@ -173,17 +192,21 @@
                                             <th>Precio Unit.</th>
                                             <th>Cantidad</th>
                                             <th>Factor</th>
+                                            <th>Unidad</th>
                                             <th>Remover</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbody-precios" class="text-center">
+                                        <% int indicePrecios = 0; %>
                                         <% if (edicion) { %>
-                                        <% for (Precio prec : prod.getPrecios()) {%>
+                                        <% for (; indicePrecios < prod.getPrecios().size(); indicePrecios++) {
+                                                Precio prec = prod.getPrecios().get(indicePrecios);
+                                        %>
                                         <tr>
                                             <td>
                                                 <%=prec.getPrecioUnitario()%>
                                                 <input type="hidden"
-                                                       name="punit-<%=prec.getIdPrecio()%>"
+                                                       name="pprecio-<%=prec.getIdPrecio()%>"
                                                        value="<%=prec.getPrecioUnitario()%>" />
                                             </td>
                                             <td>
@@ -199,6 +222,15 @@
                                                        value="<%=prec.getFactor()%>" />
                                             </td>
                                             <td>
+                                                <%=prec.getUnidad()%>
+                                                <input type="hidden"
+                                                       name="punidad-<%=prec.getIdPrecio()%>"
+                                                       value="<%=prec.getUnidad()%>" />
+                                            </td>
+                                            <td>
+                                                <input type="hidden"
+                                                       name="precio-<%=indicePrecios + 1%>"
+                                                       value="<%=prec.getIdPrecio()%>" />
                                                 <button type="button"
                                                         data-id="<%=prec.getIdPrecio()%>"
                                                         class="btn btn-danger">
@@ -207,10 +239,85 @@
                                             </td>
                                         </tr>
                                         <% } %>
-                                        <% } %>
+                                        <% }%>
                                     </tbody>
+                                    <input id="total-precios"
+                                           type="hidden"
+                                           name="total-precios"
+                                           value="<%=indicePrecios%>">
                                 </table>
                             </div>
+                            <script>
+                                var btnAgregar = document.getElementById("btn-agregar-precio");
+                                var tbodyPrecios = document.getElementById("tbody-precios");
+                                var inputPrecio = document.getElementById("pprecio");
+                                var inputUnidad = document.getElementById("puni");
+                                var inputCantidad = document.getElementById("pcantidad");
+                                var inputFactor = document.getElementById("pfactor");
+                                var inputTotal = document.getElementById("total-precios");
+
+                                btnAgregar.addEventListener("click", function (e) {
+                                    var tr = document.createElement("tr");
+                                    var valores = [{
+                                            input: inputPrecio,
+                                            prefijo: "pprecio-nuevo-"
+                                        }, {
+                                            input: inputCantidad,
+                                            prefijo: "pcantidad-nuevo-"
+                                        }, {
+                                            input: inputFactor,
+                                            prefijo: "pfactor-nuevo-"
+                                        }, {
+                                            input: inputUnidad,
+                                            prefijo: "punidad-nuevo-"
+                                        }];
+
+                                    for (var obj of valores) {
+                                        var td = document.createElement("td");
+                                        var inputHidden = document.createElement("input");
+
+                                        inputHidden.type = "hidden";
+                                        inputHidden.name = obj.prefijo + siguienteIndice();
+                                        inputHidden.value = obj.input.value;
+
+                                        td.textContent = obj.input.value;
+                                        td.appendChild(inputHidden);
+                                        tr.appendChild(td);
+                                    }
+
+                                    var btn = document.createElement("button");
+                                    var inputHidden = document.createElement("input");
+
+                                    btn.textContent = "X";
+                                    btn.className = "btn btn-danger";
+                                    btn.type = "button";
+
+                                    inputHidden.type = "hidden";
+                                    inputHidden.name = "precio-" + siguienteIndice();
+                                    inputHidden.value = "-1";
+
+                                    var td = document.createElement("td");
+                                    td.appendChild(inputHidden);
+                                    td.appendChild(btn);
+
+                                    tr.appendChild(td);
+
+                                    tbodyPrecios.appendChild(tr);
+                                    incrementarTotal();
+                                });
+
+                                function incrementarTotal() {
+                                    inputTotal.value = parseInt(inputTotal.value) + 1;
+                                }
+
+                                function decrementarTotal() {
+                                    inputTotal.value = parseInt(inputTotal.value) - 1;
+                                }
+
+                                function siguienteIndice() {
+                                    return parseInt(inputTotal.value) + 1;
+                                }
+                            </script>
                             <% if (edicion) { %>
                             <button class="btn btn-success">
                                 Modificar
