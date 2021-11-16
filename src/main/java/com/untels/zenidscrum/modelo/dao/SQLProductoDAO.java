@@ -3,6 +3,7 @@ package com.untels.zenidscrum.modelo.dao;
 import com.untels.zenidscrum.acceso.datos.Conexion;
 import com.untels.zenidscrum.modelo.bean.Precio;
 import com.untels.zenidscrum.modelo.bean.Producto;
+import com.untels.zenidscrum.modelo.bean.Proveedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +22,23 @@ public class SQLProductoDAO implements ProductoDAO {
 
     @Override
     public List<Producto> buscar(String termino, String marca, Integer idProveedor) {
-        String sql = "SELECT * FROM productos p ";
+        String sql = "SELECT "
+                + "p.*, "
+                + "a.nombre as nombre_prov, "
+                + "a.ruc, "
+                + "a.correo_electronico, "
+                + "a.telefono, "
+                + "a.id_representante, "
+                + "a.habilitado as habilitado_prov,"
+                + "pr.* "
+                + "FROM "
+                + "productos p "
+                + "INNER JOIN "
+                + "precios pr "
+                + "ON p.id_producto = pr.id_producto "
+                + "INNER JOIN "
+                + "proveedores a "
+                + "ON p.id_proveedor = a.id_proveedor ";
         List<String> partes = new ArrayList<>();
 
         if (termino != null) {
@@ -47,52 +64,63 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null, ps2 = null;
-        ResultSet rs = null, rs2 = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         List<Producto> productos = new ArrayList<>();
 
         try {
             ps = conn.prepareStatement(sql);
-            //ps.setString(1, termino + "%");
-            //ps.setString(2, marca + "%");
-            /*
-            if (idProveedor != null) {
-                ps.setString(1, idProveedor.toString());
-            }*/
             rs = ps.executeQuery();
 
+            Producto p = null;
+            Proveedor pr = null;
+            List<Precio> precios = new ArrayList<>();
+
             while (rs.next()) {
-                Producto p = new Producto();
-                p.setIdProducto(rs.getInt("id_producto"));
-                p.setNombre(rs.getString("nombre"));
-                p.setCodBarras(rs.getString("cod_barras"));
-                p.setDescripcion(rs.getString("descripcion"));
-                p.setMarca(rs.getString("marca"));
-                p.setFamilia(rs.getString("familia"));
-                p.setLinea(rs.getString("linea"));
-                p.setStock(rs.getInt("stock"));
-                p.setIgv(rs.getFloat("igv"));
-                p.setStockMinimo(rs.getInt("stock_minimo"));
-                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
-                p.setHabilitado(rs.getBoolean("habilitado"));
-
-                String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
-                ps2 = conn.prepareStatement(sql2);
-                ps2.setInt(1, p.getIdProducto());
-
-                rs2 = ps2.executeQuery();
-                List<Precio> precios = new ArrayList<>();
-                while (rs2.next()) {
-                    Precio precio = new Precio();
-                    precio.setIdPrecio(rs2.getInt("id_precio"));
-                    precio.setCantidad(rs2.getInt("cantidad"));
-                    precio.setFactor(rs2.getInt("factor"));
-                    precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
-                    precio.setUnidad(rs2.getString("unidad"));
-                    precios.add(precio);
+                if (p != null && rs.getInt("id_producto") != p.getIdProducto()) {
+                    p.setPrecios(precios);
+                    p.setProveedor(pr);
+                    productos.add(p);
+                    p = null;
+                    pr = null;
+                    precios = new ArrayList<>();
                 }
-                p.setPrecios(precios);
 
+                if (p == null) {
+                    p = new Producto();
+                    pr = new Proveedor();
+                    p.setIdProducto(rs.getInt("id_producto"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setCodBarras(rs.getString("cod_barras"));
+                    p.setDescripcion(rs.getString("descripcion"));
+                    p.setMarca(rs.getString("marca"));
+                    p.setFamilia(rs.getString("familia"));
+                    p.setLinea(rs.getString("linea"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setIgv(rs.getFloat("igv"));
+                    p.setStockMinimo(rs.getInt("stock_minimo"));
+                    p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
+                    p.setHabilitado(rs.getBoolean("habilitado"));
+
+                    pr.setIdProveedor(rs.getInt("id_proveedor"));
+                    pr.setNombre(rs.getString("nombre_prov"));
+                    pr.setRuc(rs.getString("ruc"));
+                    pr.setTelefono(rs.getString("telefono"));
+                    pr.setCorreoElectronico(rs.getString("correo_electronico"));
+                }
+
+                Precio precio = new Precio();
+                precio.setIdPrecio(rs.getInt("id_precio"));
+                precio.setCantidad(rs.getInt("cantidad"));
+                precio.setFactor(rs.getInt("factor"));
+                precio.setPrecioUnitario(rs.getFloat("precio_unitario"));
+                precio.setUnidad(rs.getString("unidad"));
+                p.setPrecios(precios);
+            }
+
+            if (p != null) {
+                p.setPrecios(precios);
+                p.setProveedor(pr);
                 productos.add(p);
             }
 
@@ -106,23 +134,9 @@ public class SQLProductoDAO implements ProductoDAO {
                     System.out.println(ex);
                 }
             }
-            if (ps2 != null) {
-                try {
-                    ps2.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
-            if (rs2 != null) {
-                try {
-                    rs2.close();
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 }
@@ -140,20 +154,32 @@ public class SQLProductoDAO implements ProductoDAO {
     }
 
     @Override
-    public List<Producto> buscarEquivalentes(String termino, String marca, Integer idProveedor) {
-        String sql = "SELECT * FROM productos p ";
+    public List<Producto> buscarEquivalentes(String familia, String linea) {
+        String sql = "SELECT "
+                + "p.*, "
+                + "a.nombre as nombre_prov, "
+                + "a.ruc, "
+                + "a.correo_electronico, "
+                + "a.telefono, "
+                + "a.id_representante, "
+                + "a.habilitado as habilitado_prov,"
+                + "pr.* "
+                + "FROM "
+                + "productos p "
+                + "INNER JOIN "
+                + "precios pr "
+                + "ON p.id_producto = pr.id_producto "
+                + "INNER JOIN "
+                + "proveedores a "
+                + "ON p.id_proveedor = a.id_proveedor ";
         List<String> partes = new ArrayList<>();
 
-        if (termino != null) {
-            partes.add("p.nombre LIKE '" + termino + "%'");
+        if (familia != null) {
+            partes.add("p.familia LIKE '" + familia + "%'");
         }
 
-        if (marca != null) {
-            partes.add("p.marca NOT LIKE '" + marca + "%'");
-        }
-
-        if (idProveedor != null) {
-            partes.add("p.id_proveedor = " + idProveedor.toString());
+        if (linea != null) {
+            partes.add("p.linea LIKE '" + linea + "%'");
         }
 
         if (partes.size() > 0) {
@@ -167,53 +193,63 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null, ps2 = null;
-        ResultSet rs = null, rs2 = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         List<Producto> productos = new ArrayList<>();
 
         try {
             ps = conn.prepareStatement(sql);
-            //ps.setString(1, termino + "%");
-            //ps.setString(2, marca + "%");
-            /*
-            if (idProveedor != null) {
-                ps.setString(1, idProveedor.toString());
-            }*/
-
             rs = ps.executeQuery();
 
+            Producto p = null;
+            Proveedor pr = null;
+            List<Precio> precios = new ArrayList<>();
+
             while (rs.next()) {
-                Producto p = new Producto();
-                p.setIdProducto(rs.getInt("id_producto"));
-                p.setNombre(rs.getString("nombre"));
-                p.setCodBarras(rs.getString("cod_barras"));
-                p.setDescripcion(rs.getString("descripcion"));
-                p.setMarca(rs.getString("marca"));
-                p.setFamilia(rs.getString("familia"));
-                p.setLinea(rs.getString("linea"));
-                p.setStock(rs.getInt("stock"));
-                p.setIgv(rs.getFloat("igv"));
-                p.setStockMinimo(rs.getInt("stock_minimo"));
-                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
-                p.setHabilitado(rs.getBoolean("habilitado"));
-
-                String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
-                ps2 = conn.prepareStatement(sql2);
-                ps2.setInt(1, p.getIdProducto());
-
-                rs2 = ps2.executeQuery();
-                List<Precio> precios = new ArrayList<>();
-                while (rs2.next()) {
-                    Precio precio = new Precio();
-                    precio.setIdPrecio(rs2.getInt("id_precio"));
-                    precio.setCantidad(rs2.getInt("cantidad"));
-                    precio.setFactor(rs2.getInt("factor"));
-                    precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
-                    precio.setUnidad(rs2.getString("unidad"));
-                    precios.add(precio);
+                if (p != null && rs.getInt("id_producto") != p.getIdProducto()) {
+                    p.setPrecios(precios);
+                    p.setProveedor(pr);
+                    productos.add(p);
+                    p = null;
+                    pr = null;
+                    precios = new ArrayList<>();
                 }
-                p.setPrecios(precios);
 
+                if (p == null) {
+                    p = new Producto();
+                    pr = new Proveedor();
+                    p.setIdProducto(rs.getInt("id_producto"));
+                    p.setNombre(rs.getString("nombre"));
+                    p.setCodBarras(rs.getString("cod_barras"));
+                    p.setDescripcion(rs.getString("descripcion"));
+                    p.setMarca(rs.getString("marca"));
+                    p.setFamilia(rs.getString("familia"));
+                    p.setLinea(rs.getString("linea"));
+                    p.setStock(rs.getInt("stock"));
+                    p.setIgv(rs.getFloat("igv"));
+                    p.setStockMinimo(rs.getInt("stock_minimo"));
+                    p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
+                    p.setHabilitado(rs.getBoolean("habilitado"));
+
+                    pr.setIdProveedor(rs.getInt("id_proveedor"));
+                    pr.setNombre(rs.getString("nombre_prov"));
+                    pr.setRuc(rs.getString("ruc"));
+                    pr.setTelefono(rs.getString("telefono"));
+                    pr.setCorreoElectronico(rs.getString("correo_electronico"));
+                }
+
+                Precio precio = new Precio();
+                precio.setIdPrecio(rs.getInt("id_precio"));
+                precio.setCantidad(rs.getInt("cantidad"));
+                precio.setFactor(rs.getInt("factor"));
+                precio.setPrecioUnitario(rs.getFloat("precio_unitario"));
+                precio.setUnidad(rs.getString("unidad"));
+                p.setPrecios(precios);
+            }
+
+            if (p != null) {
+                p.setPrecios(precios);
+                p.setProveedor(pr);
                 productos.add(p);
             }
 
@@ -227,23 +263,9 @@ public class SQLProductoDAO implements ProductoDAO {
                     System.out.println(ex);
                 }
             }
-            if (ps2 != null) {
-                try {
-                    ps2.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
-            if (rs2 != null) {
-                try {
-                    rs2.close();
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 }
