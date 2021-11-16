@@ -38,6 +38,9 @@
                                     type="text"
                                     class="form-control"
                                     name="nombre"
+                                    <%if (request.getParameter("nombre") != null) {%>
+                                    value="<%=request.getParameter("nombre")%>"
+                                    <% } %>
                                     >
                             </div>
                             <div class="col-sm-12 col-md-3">
@@ -46,7 +49,11 @@
                                     <option selected disabled value="">Elegir marca</option>
                                     <% for (String m : marcas) {%>
                                     <option
-                                        value="<%=m%>"><%=m%></option>
+                                        value="<%=m%>"
+                                        <%if (request.getParameter("marca") != null && request.getParameter("marca").equals(m)) {%>
+                                        selected
+                                        <% }%>
+                                        ><%=m%></option>
                                     <% } %>
                                 </select>
                             </div>
@@ -57,6 +64,10 @@
                                     <% for (Proveedor p : proveedores) {%>
                                     <option
                                         value="<%=p.getIdProveedor()%>"
+                                        <%if (request.getParameter("idproveedor") != null
+                                                    && request.getParameter("idproveedor").equals(Integer.toString(p.getIdProveedor()))) {%>
+                                        selected
+                                        <% }%>
                                         ><%=p.getNombre()%></option>
                                     <% } %>
                                 </select>
@@ -82,6 +93,8 @@
                                                 <th>Marca</th>
                                                 <th>Descripción</th>
                                                 <th>Stock</th>
+                                                <th>Familia</th>
+                                                <th>Linea</th>
                                                 <th>Opciones</th>
                                             </tr>
                                         </thead>
@@ -93,6 +106,8 @@
                                                 <td><%=p.getMarca()%></td>
                                                 <td><%=p.getDescripcion()%></td>
                                                 <td><%=p.getStock()%></td>
+                                                <td><%=p.getFamilia()%></td>
+                                                <td><%=p.getLinea()%></td>
                                                 <td>
                                                     <form action="agregar-producto-proforma?idProducto=<%=p.getIdProducto()%>"
                                                           method="POST">
@@ -169,6 +184,8 @@
                                                 <th>Marca</th>
                                                 <th>Descripción</th>
                                                 <th>Stock</th>
+                                                <th>Familia</th>
+                                                <th>Linea</th>
                                                 <th>Opciones</th>
                                             </tr>
                                         </thead>
@@ -180,6 +197,8 @@
                                                 <td><%=p.getMarca()%></td>
                                                 <td><%=p.getDescripcion()%></td>
                                                 <td><%=p.getStock()%></td>
+                                                <td><%=p.getFamilia()%></td>
+                                                <td><%=p.getLinea()%></td>
                                                 <td>
                                                     <form action="agregar-producto-proforma?idProducto=<%=p.getIdProducto()%>"
                                                           method="POST">
