@@ -490,4 +490,43 @@ public class SQLUsuarioDAO implements UsuarioDAO {
 
         return filasModificadas > 0;
     }
+
+    @Override
+    public boolean modificarContrasenia(int idUsuario, String contrasenia) {
+        String sql = "UPDATE usuarios SET "
+                + "contrasenia=? "
+                + "WHERE id_usuario=?";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, contrasenia);
+            ps.setInt(2, idUsuario);
+
+            filasModificadas = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
+    }
 }
