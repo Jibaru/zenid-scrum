@@ -12,4 +12,6 @@ public interface ProductoDAO {
     public List<Producto> listarTodos();
 
     public Producto obtenerPorId(int idProducto);
+
+    public List<Producto> listarStockBajo();
 }
