@@ -9,7 +9,6 @@ public class Proveedor {
     private String ruc;
     private String correoElectronico;
     private String telefono;
-    private int idRepresentante;
     private boolean habilitado;
     private Representante representante;
     private List<Vendedor> vendedores;
@@ -52,14 +51,6 @@ public class Proveedor {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public int getIdRepresentante() {
-        return idRepresentante;
-    }
-
-    public void setIdRepresentante(int idRepresentante) {
-        this.idRepresentante = idRepresentante;
     }
 
     public boolean isHabilitado() {
