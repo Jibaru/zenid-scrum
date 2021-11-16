@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SQLPrecioDAO implements PrecioDAO {
 
@@ -68,8 +69,63 @@ public class SQLPrecioDAO implements PrecioDAO {
     }
 
     @Override
-    public boolean crear(Precio arg0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean crear(Precio p) {
+        String sql = "INSERT INTO precios ("
+                + "precio_unitario, "
+                + "unidad,"
+                + "cantidad, "
+                + "factor,"
+                + "id_producto) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setFloat(1, p.getPrecioUnitario());
+            ps.setString(2, p.getUnidad());
+            ps.setInt(3, p.getCantidad());
+            ps.setInt(4, p.getFactor());
+            ps.setInt(5, p.getIdProducto());
+
+            filasModificadas = ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                p.setIdPrecio(rs.getInt(1));
+
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
     }
 
     @Override
