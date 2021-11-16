@@ -28,6 +28,8 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Descripción</th>
+                                        <th>Marca</th>
+                                        <th>Precio compra unitario</th>
                                         <th>
                                             <a href="formulario-producto" class="btn btn-primary">
                                                 Nuevo
@@ -41,8 +43,10 @@
                                         <td><%=r.getIdProducto()%></td>
                                         <td><%=r.getNombre()%></td>
                                         <td><%=r.getDescripcion()%></td>
+                                        <td><%=r.getMarca()%></td>
+                                        <td>S/. <%=r.getPrecioCompraUnitario()%></td>
                                         <td>
-                                            <a href="formulario-producto?idProducto=<%=r.getIdProducto()%>"
+                                            <!--<a href="formulario-producto?idProducto=<%=r.getIdProducto()%>"
                                                class="btn btn-warning">
                                                 Editar
                                             </a>
@@ -56,7 +60,7 @@
                                                class="btn btn-dark">
                                                 Habilitar
                                             </a>
-                                            <% } %>
+                                            <% } %>-->
                                         </td>
                                     </tr>
                                     <% }%>
