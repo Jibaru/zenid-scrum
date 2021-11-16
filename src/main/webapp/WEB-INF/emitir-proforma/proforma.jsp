@@ -14,7 +14,7 @@
     if (productosProforma != null) {
         for (ProductoProformado p : productosProforma) {
             subTotal += (p.getPrecioUnitario() * p.getCantidad());
-            igvTotal += p.getIgv();
+            igvTotal += (p.getIgv() * p.getPrecioUnitario() * p.getCantidad());
         }
     }
     float total = subTotal + igvTotal;
@@ -53,18 +53,20 @@
                                     <th>Cod. Barras</th>
                                     <th>Nombre</th>
                                     <th>Descripción</th>
-                                    <th>Precio Unitario</th>
+                                    <th>Precio Unitario (S/.)</th>
                                     <th>Cantidad</th>
                                     <th>IGV</th>
-                                    <th>Subtotal</th>
-                                    <th>Total + IGV</th>
+                                    <th>Subtotal (S/.)</th>
+                                    <th>Total IGV (S/.)</th>
+                                    <th>Total + IGV (S/.)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% for (ProductoProformado p : productosProforma) {%>
                                 <%
                                     float subtotalProducto = p.getCantidad() * p.getPrecioUnitario();
-                                    float totalProducto = subtotalProducto * p.getIgv();
+                                    float totalIGVProducto = subtotalProducto * p.getIgv();
+                                    float totalProducto = subtotalProducto + totalIGVProducto;
                                 %>
                                 <tr>
                                     <td><%=p.getCodBarras()%></td>
@@ -79,12 +81,15 @@
                                         <%=String.format("%.02f", subtotalProducto)%>
                                     </td>
                                     <td class="text-end">
+                                        <%=String.format("%.02f", totalIGVProducto)%>
+                                    </td>
+                                    <td class="text-end">
                                         <%=String.format("%.02f", totalProducto)%>
                                     </td>
                                 </tr>
                                 <% }%>
                                 <tr>
-                                    <td colspan="6" class="text-end">
+                                    <td colspan="7" class="text-end">
                                         <%=String.format("%.02f", subTotal)%>
                                     </td>
                                     <td class="text-end">
@@ -95,7 +100,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="7" class="text-end">
+                                    <td colspan="8" class="text-end">
                                         <b>Precio Total</b>
                                     </td>
                                     <td class="text-end">
