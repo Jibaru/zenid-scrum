@@ -16,6 +16,9 @@
             color: #000;
             padding: 8px 16px;
             text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         /* Change the link color on hover */
@@ -28,39 +31,47 @@
     <ul>
         <li>
             <a href="emision-proforma">
-                Emitir Proforma
+                <span>Emitir Proforma</span>
+                <i class="fas fa-file-alt"></i>
             </a>
+
         </li>
         <li>
             <a href="emision-pedido">
-                Emitir Pedido
+                <span>Emitir Pedido</span>
+                <i class="fas fa-file-powerpoint"></i>
             </a>
         </li>
         <li>
             <a href="pedidos">
-                Listado Pedidos
+                <span>Listado Pedidos</span>
+                <i class="fas fa-copy"></i>
             </a>
         </li>
         <hr />
         <li>
             <a href="proveedores">
-                Gestionar Proveedores
+                <span>Gestionar Proveedores</span>
+                <i class="fas fa-people-carry"></i>
             </a>
         </li>
         <li>
             <a href="productos">
-                Gestionar Productos
+                <span>Gestionar Productos</span>
+                <i class="fas fa-boxes"></i>
             </a>
         </li>
         <hr />
         <li>
             <a href="roles">
-                Gestionar Roles
+                <span>Gestionar Roles</span>
+                <i class="fas fa-key"></i>
             </a>
         </li>
         <li>
             <a href="usuarios">
-                Gestionar Usuarios
+                <span>Gestionar Usuarios</span>
+                <i class="fas fa-users"></i>
             </a>
         </li>
     </ul>

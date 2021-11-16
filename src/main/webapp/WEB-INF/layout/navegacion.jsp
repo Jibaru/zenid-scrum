@@ -22,7 +22,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="cerrar-sesion">
-                        Cerrar Sesión
+                        Cerrar Sesión <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </li>
             </ul>
