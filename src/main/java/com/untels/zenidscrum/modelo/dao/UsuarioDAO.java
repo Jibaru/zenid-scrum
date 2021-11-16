@@ -18,4 +18,6 @@ public interface UsuarioDAO {
     public boolean inhabilitar(int idUsuario);
 
     public boolean habilitar(int idUsuario);
+
+    public boolean modificarContrasenia(int idUsuario, String contrasenia);
 }
