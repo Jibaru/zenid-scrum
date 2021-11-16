@@ -1,10 +1,13 @@
 package com.untels.zenidscrum.controlador.seguridad;
 
 import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.bean.Precio;
 import com.untels.zenidscrum.modelo.bean.Producto;
 import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.dao.PrecioDAO;
 import com.untels.zenidscrum.modelo.dao.ProductoDAO;
 import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.SQLPrecioDAO;
 import com.untels.zenidscrum.modelo.dao.SQLProductoDAO;
 import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
 import java.io.IOException;
@@ -30,11 +33,13 @@ public class ProductoServlet extends HttpServlet {
 
     private final ProductoDAO productoDAO;
     private final ProveedorDAO proveedorDAO;
+    private final PrecioDAO precioDAO;
 
     public ProductoServlet() {
         SQLConexion conexion = new SQLConexion();
         productoDAO = new SQLProductoDAO(conexion);
         proveedorDAO = new SQLProveedorDAO(conexion);
+        precioDAO = new SQLPrecioDAO(conexion);
     }
 
     /**
@@ -136,8 +141,61 @@ public class ProductoServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-    private void crearProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void crearProducto(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String nombre = request.getParameter("nombre");
+        String codBarras = request.getParameter("cod-barras");
+        String descripcion = request.getParameter("descripcion");
+        String marca = request.getParameter("marca");
+        String familia = request.getParameter("familia");
+        String linea = request.getParameter("linea");
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        int stockMinimo = Integer.parseInt(request.getParameter("stock-minimo"));
+        float igv = Float.parseFloat(request.getParameter("igv"));
+        float precioCompraUnitario = Float.parseFloat(request.getParameter("precio-compra-unitario"));
+        int idProveedor = Integer.parseInt(request.getParameter("proveedor"));
+
+        int totalPrecios = Integer.parseInt(request.getParameter("total-precios"));
+
+        Proveedor prov = proveedorDAO.obtenerPorId(idProveedor);
+
+        Producto prod = new Producto();
+        prod.setNombre(nombre);
+        prod.setCodBarras(codBarras);
+        prod.setDescripcion(descripcion);
+        prod.setMarca(marca);
+        prod.setFamilia(familia);
+        prod.setLinea(linea);
+        prod.setStock(stock);
+        prod.setStockMinimo(stockMinimo);
+        prod.setIgv(igv);
+        prod.setPrecioCompraUnitario(precioCompraUnitario);
+        prod.setProveedor(prov);
+        prod.setHabilitado(true);
+
+        if (productoDAO.crear(prod)) {
+            for (int i = 1; i <= totalPrecios; i++) {
+                int idPrecio = Integer.parseInt(request.getParameter("precio-" + i));
+
+                float precioUnit = Float.parseFloat(request.getParameter("pprecio-nuevo-" + i));
+                int cantidad = Integer.parseInt(request.getParameter("pcantidad-nuevo-" + i));
+                int factor = Integer.parseInt(request.getParameter("pfactor-nuevo-" + i));
+                String unidad = request.getParameter("punidad-nuevo-" + i);
+
+                Precio precio = new Precio();
+                precio.setPrecioUnitario(precioUnit);
+                precio.setCantidad(cantidad);
+                precio.setFactor(factor);
+                precio.setUnidad(unidad);
+                precio.setIdProducto(prod.getIdProducto());
+
+                precioDAO.crear(precio);
+            }
+
+            response.sendRedirect("productos");
+        } else {
+            response.sendRedirect("formulario-producto");
+        }
+
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
