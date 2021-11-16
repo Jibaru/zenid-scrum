@@ -115,7 +115,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 precio.setFactor(rs.getInt("factor"));
                 precio.setPrecioUnitario(rs.getFloat("precio_unitario"));
                 precio.setUnidad(rs.getString("unidad"));
-                p.setPrecios(precios);
+                precios.add(precio);
             }
 
             if (p != null) {
@@ -244,7 +244,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 precio.setFactor(rs.getInt("factor"));
                 precio.setPrecioUnitario(rs.getFloat("precio_unitario"));
                 precio.setUnidad(rs.getString("unidad"));
-                p.setPrecios(precios);
+                precios.add(precio);
             }
 
             if (p != null) {
