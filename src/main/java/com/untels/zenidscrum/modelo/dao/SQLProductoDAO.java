@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -467,5 +468,79 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         return productos;
+    }
+
+    @Override
+    public boolean crear(Producto p) {
+        String sql = "INSERT INTO productos ("
+                + "nombre, "
+                + "cod_barras,"
+                + "descripcion, "
+                + "marca,"
+                + "familia,"
+                + "linea,"
+                + "stock,"
+                + "id_proveedor,"
+                + "igv,"
+                + "stock_minimo,"
+                + "precio_compra_unitario,"
+                + "habilitado) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getCodBarras());
+            ps.setString(3, p.getDescripcion());
+            ps.setString(4, p.getMarca());
+            ps.setString(5, p.getFamilia());
+            ps.setString(6, p.getLinea());
+            ps.setInt(7, p.getStock());
+            ps.setInt(8, p.getProveedor().getIdProveedor());
+            ps.setFloat(9, p.getIgv());
+            ps.setInt(10, p.getStockMinimo());
+            ps.setFloat(11, p.getPrecioCompraUnitario());
+            ps.setBoolean(12, p.isHabilitado());
+
+            filasModificadas = ps.executeUpdate();
+            rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                p.setIdProducto(rs.getInt(1));
+
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
     }
 }
