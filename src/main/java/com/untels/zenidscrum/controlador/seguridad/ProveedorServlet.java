@@ -2,8 +2,11 @@ package com.untels.zenidscrum.controlador.seguridad;
 
 import com.untels.zenidscrum.acceso.datos.SQLConexion;
 import com.untels.zenidscrum.modelo.bean.Proveedor;
+import com.untels.zenidscrum.modelo.bean.Representante;
 import com.untels.zenidscrum.modelo.dao.ProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.RepresentanteDAO;
 import com.untels.zenidscrum.modelo.dao.SQLProveedorDAO;
+import com.untels.zenidscrum.modelo.dao.SQLRepresentanteDAO;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -26,10 +29,12 @@ import javax.servlet.http.HttpServletResponse;
 public class ProveedorServlet extends HttpServlet {
 
     private final ProveedorDAO proveedorDAO;
+    private final RepresentanteDAO representanteDAO;
 
     public ProveedorServlet() {
         SQLConexion conexion = new SQLConexion();
         this.proveedorDAO = new SQLProveedorDAO(conexion);
+        this.representanteDAO = new SQLRepresentanteDAO(conexion);
     }
 
     /**
@@ -124,24 +129,98 @@ public class ProveedorServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
+
+        String idProveedor = request.getParameter("idProveedor");
+
+        if (idProveedor != null) {
+            Proveedor proveedor = proveedorDAO.obtenerPorId(Integer.parseInt(idProveedor));
+            request.setAttribute("proveedor", proveedor);
+        }
+
         request.getRequestDispatcher("WEB-INF/proveedores/formulario.jsp")
                 .forward(request, response);
     }
 
-    private void crearProveedor(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void crearProveedor(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        String nombre = request.getParameter("nombre");
+        String ruc = request.getParameter("ruc");
+        String correoElectronico = request.getParameter("correo-electronico");
+        String telefono = request.getParameter("telefono");
+        String nombreRep = request.getParameter("nombre-representante");
+        String correoElectronicoRep = request.getParameter("correo-electronico-representante");
+        String telefonoRep = request.getParameter("telefono-representante");
+
+        Representante rep = new Representante();
+        rep.setNombre(nombreRep);
+        rep.setCorreoElectronico(correoElectronicoRep);
+        rep.setTelefono(telefonoRep);
+
+        if (representanteDAO.crear(rep)) {
+            Proveedor pr = new Proveedor();
+            pr.setRepresentante(rep);
+            pr.setNombre(nombre);
+            pr.setRuc(ruc);
+            pr.setCorreoElectronico(correoElectronico);
+            pr.setTelefono(telefono);
+            pr.setHabilitado(true);
+
+            proveedorDAO.crear(pr);
+
+            response.sendRedirect("proveedores");
+        } else {
+            response.sendRedirect("formulario-proveedor");
+        }
     }
 
-    private void modificarProveedor(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void modificarProveedor(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idProveedor = Integer.parseInt(request.getParameter("idProveedor"));
+        String nombre = request.getParameter("nombre");
+        String ruc = request.getParameter("ruc");
+        String correoElectronico = request.getParameter("correo-electronico");
+        String telefono = request.getParameter("telefono");
+        String nombreRep = request.getParameter("nombre-representante");
+        String correoElectronicoRep = request.getParameter("correo-electronico-representante");
+        String telefonoRep = request.getParameter("telefono-representante");
+
+        Proveedor pr = proveedorDAO.obtenerPorId(idProveedor);
+        pr.setNombre(nombre);
+        pr.setRuc(ruc);
+        pr.setCorreoElectronico(correoElectronico);
+        pr.setTelefono(telefono);
+
+        Representante rep = pr.getRepresentante();
+        rep.setNombre(nombreRep);
+        rep.setCorreoElectronico(correoElectronicoRep);
+        rep.setTelefono(telefonoRep);
+
+        if (representanteDAO.modificar(rep)) {
+            proveedorDAO.modificar(pr);
+        }
+        response.sendRedirect("formulario-proveedor?idProveedor=" + idProveedor);
     }
 
-    private void inhabilitarProveedor(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void inhabilitarProveedor(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idProveedor = Integer.parseInt(request.getParameter("idProveedor"));
+        proveedorDAO.inhabilitar(idProveedor);
+        response.sendRedirect("proveedores");
     }
 
-    private void habilitarProveedor(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void habilitarProveedor(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idProveedor = Integer.parseInt(request.getParameter("idProveedor"));
+        proveedorDAO.habilitar(idProveedor);
+        response.sendRedirect("proveedores");
     }
 
 }
