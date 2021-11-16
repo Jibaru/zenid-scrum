@@ -72,6 +72,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStock(rs.getInt("stock"));
                 p.setIgv(rs.getFloat("igv"));
                 p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
                 String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
@@ -192,6 +193,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStock(rs.getInt("stock"));
                 p.setIgv(rs.getFloat("igv"));
                 p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
                 String sql2 = "SELECT * FROM precios WHERE id_precio = ?";
@@ -282,6 +284,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStock(rs.getInt("stock"));
                 p.setIgv(rs.getFloat("igv"));
                 p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
                 productos.add(p);
@@ -342,6 +345,7 @@ public class SQLProductoDAO implements ProductoDAO {
                 p.setStock(rs.getInt("stock"));
                 p.setIgv(rs.getFloat("igv"));
                 p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
                 p.setHabilitado(rs.getBoolean("habilitado"));
 
                 String sql2 = "SELECT * FROM precios WHERE id_producto = ?";
@@ -403,5 +407,65 @@ public class SQLProductoDAO implements ProductoDAO {
         }
 
         return p;
+    }
+
+    @Override
+    public List<Producto> listarStockBajo() {
+        String sql = "SELECT * FROM productos WHERE stock <= stock_minimo";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Producto> productos = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Producto p = new Producto();
+                p.setIdProducto(rs.getInt("id_producto"));
+                p.setNombre(rs.getString("nombre"));
+                p.setCodBarras(rs.getString("cod_barras"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setMarca(rs.getString("marca"));
+                p.setFamilia(rs.getString("familia"));
+                p.setLinea(rs.getString("linea"));
+                p.setStock(rs.getInt("stock"));
+                p.setIgv(rs.getFloat("igv"));
+                p.setStockMinimo(rs.getInt("stock_minimo"));
+                p.setPrecioCompraUnitario(rs.getFloat("precio_compra_unitario"));
+                p.setHabilitado(rs.getBoolean("habilitado"));
+
+                productos.add(p);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return productos;
     }
 }
