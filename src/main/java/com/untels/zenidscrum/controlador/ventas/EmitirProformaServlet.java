@@ -161,16 +161,23 @@ public class EmitirProformaServlet extends HttpServlet {
             idProv = Integer.parseInt(idproveedor);
         }
 
-        List<Producto> producto = productoDAO.buscar(nombre, marca, idProv);
-        request.setAttribute("productos", producto);
+        List<Producto> productos = productoDAO.buscar(nombre, marca, idProv);
 
-        List<Producto> productosEquivalentes = productoDAO.buscarEquivalentes(nombre, marca, idProv);
-        request.setAttribute("productosEquivalentes", productosEquivalentes);
+        String familia = (!productos.isEmpty() ? productos.get(0).getFamilia() : null);
+        String linea = (!productos.isEmpty() ? productos.get(0).getLinea() : null);
+
+        List<Producto> productosEquivalentes = new ArrayList<>();
+
+        if (familia != null || linea != null) {
+            productosEquivalentes = productoDAO.buscarEquivalentes(familia, linea);
+        }
 
         List<String> marcas = marcaDAO.listarTodos();
-        request.setAttribute("marcas", marcas);
-
         List<Proveedor> proveedor = proveedorDAO.listarTodos();
+
+        request.setAttribute("productos", productos);
+        request.setAttribute("productosEquivalentes", productosEquivalentes);
+        request.setAttribute("marcas", marcas);
         request.setAttribute("proveedores", proveedor);
 
         request.getRequestDispatcher("WEB-INF/emitir-proforma/index.jsp")
