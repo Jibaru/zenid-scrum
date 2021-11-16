@@ -14,4 +14,6 @@ public interface ProductoDAO {
     public Producto obtenerPorId(int idProducto);
 
     public List<Producto> listarStockBajo();
+
+    public boolean crear(Producto p);
 }
