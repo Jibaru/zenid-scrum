@@ -7,6 +7,7 @@ public class Precio {
     private int cantidad;
     private int factor;
     private String unidad;
+    private int idProducto;
 
     public int getIdPrecio() {
         return idPrecio;
@@ -46,6 +47,14 @@ public class Precio {
 
     public void setUnidad(String unidad) {
         this.unidad = unidad;
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
 }
