@@ -1,19 +1,20 @@
-
 package com.untels.zenidscrum.modelo.bean;
 
 import java.util.List;
 
 public class Producto {
+
     private int idProducto;
-    private String nombre; 
-    private String codBarras; 
-    private String descripcion; 
-    private String marca; 
-    private String familia; 
-    private String linea; 
-    private int stock; 
+    private String nombre;
+    private String codBarras;
+    private String descripcion;
+    private String marca;
+    private String familia;
+    private String linea;
+    private int stock;
     private Proveedor proveedor;
     private float igv;
+    private float precioCompraUnitario;
     private int stockMinimo;
     private boolean habilitado;
     private List<Precio> precios;
@@ -121,6 +122,13 @@ public class Producto {
     public void setPrecios(List<Precio> precios) {
         this.precios = precios;
     }
-    
-    
+
+    public float getPrecioCompraUnitario() {
+        return precioCompraUnitario;
+    }
+
+    public void setPrecioCompraUnitario(float precioCompraUnitario) {
+        this.precioCompraUnitario = precioCompraUnitario;
+    }
+
 }
