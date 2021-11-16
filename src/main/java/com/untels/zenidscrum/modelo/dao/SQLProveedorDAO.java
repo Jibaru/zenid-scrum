@@ -29,7 +29,9 @@ public class SQLProveedorDAO implements ProveedorDAO {
                 + "p.id_representante, "
                 + "p.habilitado, "
                 + "r.id_representante as id_rep, "
-                + "r.nombre as nombre_representante "
+                + "r.nombre as nombre_rep, "
+                + "r.correo_electronico as correo_electronico_rep, "
+                + "r.telefono as telefono_rep "
                 + "from proveedores p "
                 + "INNER JOIN representantes r "
                 + "on p.id_representante = r.id_representante";
@@ -46,32 +48,6 @@ public class SQLProveedorDAO implements ProveedorDAO {
             rs = ps.executeQuery(sql);
 
             while (rs.next()) {
-
-                if (prov != null && rs.getInt("id_proveedor") != prov.getIdProveedor()) {
-
-                    prov.setRepresentante(rep);
-                    proveedores.add(prov);
-                    rep = null;
-                    prov = null;
-
-                }
-
-                if (prov == null) {
-                    prov = new Proveedor();
-                    rep = new Representante();
-                    prov.setIdProveedor(rs.getInt("id_proveedor"));
-                    prov.setCorreoElectronico(rs.getString("correo_electronico"));
-                    prov.setNombre(rs.getString("nombre"));
-                    prov.setRuc(rs.getString("ruc"));
-                    prov.setTelefono(rs.getString("telefono"));
-                    prov.setHabilitado(rs.getBoolean("habilitado"));
-                    rep.setIdRepresentante(rs.getInt("id_representante"));
-                    rep.setNombre(rs.getString("nombre_representante"));
-                }
-
-            }
-
-            if (prov == null) {
                 prov = new Proveedor();
                 rep = new Representante();
                 prov.setIdProveedor(rs.getInt("id_proveedor"));
@@ -81,10 +57,9 @@ public class SQLProveedorDAO implements ProveedorDAO {
                 prov.setTelefono(rs.getString("telefono"));
                 prov.setHabilitado(rs.getBoolean("habilitado"));
                 rep.setIdRepresentante(rs.getInt("id_representante"));
-                rep.setNombre(rs.getString("nombre_representante"));
-            }
-
-            if (prov != null) {
+                rep.setNombre(rs.getString("nombre_rep"));
+                rep.setCorreoElectronico(rs.getString("correo_electronico_rep"));
+                rep.setTelefono(rs.getString("telefono_rep"));
                 prov.setRepresentante(rep);
                 proveedores.add(prov);
             }
@@ -128,17 +103,18 @@ public class SQLProveedorDAO implements ProveedorDAO {
                 + "p.id_representante, "
                 + "p.habilitado, "
                 + "r.id_representante as id_rep, "
-                + "r.nombre as nombre_rep "
-                + "FROM proveedor p "
-                + "INNER JOIN representante r "
+                + "r.nombre as nombre_rep, "
+                + "r.correo_electronico as correo_electronico_rep, "
+                + "r.telefono as telefono_rep "
+                + "FROM proveedores p "
+                + "INNER JOIN representantes r "
                 + "ON p.id_representante = r.id_representante "
-                + "WHERE u.id_proveedor= ?";
+                + "WHERE p.id_proveedor= ?";
 
         Connection conn = conexion.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
         Proveedor prov = null;
-        Representante rep = null;
 
         try {
             ps = conn.prepareStatement(sql);
@@ -147,25 +123,19 @@ public class SQLProveedorDAO implements ProveedorDAO {
 
             rs = ps.executeQuery();
 
-            while (rs.next()) {
-
-                if (prov == null) {
-                    prov = new Proveedor();
-                    rep = new Representante();
-                    prov.setIdProveedor(rs.getInt("id_proveedor"));
-                    prov.setNombre(rs.getString("nombre"));
-                    prov.setRuc(rs.getString("ruc"));
-                    prov.setCorreoElectronico(rs.getString("correo_electronico"));
-                    prov.setTelefono(rs.getString("telefono"));
-                    prov.setHabilitado(rs.getBoolean("habilitado"));
-                    rep.setIdRepresentante(rs.getInt("id_represetante"));
-                    /*chequeardespues*/ rep.setNombre(rs.getString("nombre_rep"));
-
-                }
-
-            }
-
-            if (prov != null) {
+            if (rs.next()) {
+                prov = new Proveedor();
+                Representante rep = new Representante();
+                prov.setIdProveedor(rs.getInt("id_proveedor"));
+                prov.setNombre(rs.getString("nombre"));
+                prov.setRuc(rs.getString("ruc"));
+                prov.setCorreoElectronico(rs.getString("correo_electronico"));
+                prov.setTelefono(rs.getString("telefono"));
+                prov.setHabilitado(rs.getBoolean("habilitado"));
+                rep.setIdRepresentante(rs.getInt("id_representante"));
+                rep.setNombre(rs.getString("nombre_rep"));
+                rep.setCorreoElectronico(rs.getString("correo_electronico_rep"));
+                rep.setTelefono(rs.getString("telefono_rep"));
                 prov.setRepresentante(rep);
             }
 
@@ -200,7 +170,7 @@ public class SQLProveedorDAO implements ProveedorDAO {
 
     @Override
     public boolean crear(Proveedor prov) {
-        String sql = "INSERT INTO proveedor ("
+        String sql = "INSERT INTO proveedores ("
                 + "nombre, "
                 + "ruc ,"
                 + "correo_electronico, "
@@ -262,11 +232,11 @@ public class SQLProveedorDAO implements ProveedorDAO {
 
     @Override
     public boolean modificar(Proveedor prov) {
-        String sql = "UPDATE proveedor SET "
+        String sql = "UPDATE proveedores SET "
                 + "nombre=?, "
                 + "ruc=?,"
                 + "correo_electronico=?, "
-                + "telefono=?"
+                + "telefono=?,"
                 + "id_representante=?, "
                 + "habilitado=? "
                 + "WHERE id_proveedor=?";
@@ -281,8 +251,9 @@ public class SQLProveedorDAO implements ProveedorDAO {
             ps.setString(2, prov.getRuc());
             ps.setString(3, prov.getCorreoElectronico());
             ps.setString(4, prov.getTelefono());
-            ps.setInt(5, prov.getIdRepresentante());
+            ps.setInt(5, prov.getRepresentante().getIdRepresentante());
             ps.setBoolean(6, prov.isHabilitado());
+            ps.setInt(7, prov.getIdProveedor());
 
             filasModificadas = ps.executeUpdate();
 
@@ -307,6 +278,52 @@ public class SQLProveedorDAO implements ProveedorDAO {
 
         return filasModificadas > 0;
 
+    }
+
+    @Override
+    public boolean inhabilitar(int idProveedor) {
+        return modificarHabilitado(idProveedor, false);
+    }
+
+    @Override
+    public boolean habilitar(int idProveedor) {
+        return modificarHabilitado(idProveedor, true);
+    }
+
+    private boolean modificarHabilitado(int idHabilitado, boolean habilitado) {
+        String sql = "UPDATE proveedores SET habilitado=? WHERE id_proveedor=?";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setBoolean(1, habilitado);
+            ps.setInt(2, idHabilitado);
+
+            filasModificadas = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
     }
 
 }
