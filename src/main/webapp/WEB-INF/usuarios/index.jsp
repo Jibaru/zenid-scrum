@@ -56,6 +56,10 @@
                                                class="btn btn-warning">
                                                 Editar
                                             </a>
+                                            <a href="formulario-cambio-contrasenia?idUsuario=<%=u.getIdUsuario()%>"
+                                               class="btn btn-info">
+                                                Cambiar Contra.
+                                            </a>
                                             <% } %>
                                             <% if (prvModUsuario.isEliminar()) { %>
                                             <% if (u.isHabilitado()) {%>
