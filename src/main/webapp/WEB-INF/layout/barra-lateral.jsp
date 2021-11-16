@@ -32,8 +32,13 @@
             </a>
         </li>
         <li>
-            <a href="VerificarStock">
-                Solicitar Productos
+            <a href="emision-pedido">
+                Emitir Pedido
+            </a>
+        </li>
+        <li>
+            <a href="pedidos">
+                Listado Pedidos
             </a>
         </li>
         <hr />
