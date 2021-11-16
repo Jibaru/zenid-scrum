@@ -23,7 +23,9 @@ import javax.servlet.http.HttpServletResponse;
             "/crear-usuario",
             "/modificar-usuario",
             "/inhabilitar-usuario",
-            "/habilitar-usuario"
+            "/habilitar-usuario",
+            "/formulario-cambio-contrasenia",
+            "/cambiar-contrasenia-usuario"
         }
 )
 public class UsuarioServlet extends HttpServlet {
@@ -68,6 +70,12 @@ public class UsuarioServlet extends HttpServlet {
                 break;
             case "/habilitar-usuario":
                 habilitarUsuario(request, response);
+                break;
+            case "/formulario-cambio-contrasenia":
+                formularioCambioContrasenia(request, response);
+                break;
+            case "/cambiar-contrasenia-usuario":
+                cambiarContraseniaUsuario(request, response);
                 break;
             default:
                 request.getRequestDispatcher("WEB-INF/404/index.jsp")
@@ -220,6 +228,35 @@ public class UsuarioServlet extends HttpServlet {
         int idUsuario = Integer.parseInt(idUsuarioStr);
 
         usuarioDAO.habilitar(idUsuario);
+
+        response.sendRedirect("usuarios");
+    }
+
+    private void formularioCambioContrasenia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idUsuario = request.getParameter("idUsuario");
+
+        Usuario usuario = usuarioDAO.obtenerPorId(Integer.parseInt(idUsuario));
+            request.setAttribute("usuario", usuario);
+
+        request.getRequestDispatcher("WEB-INF/usuarios/formulario-cambio-contrasenia.jsp")
+                .forward(request, response);
+
+    }
+
+    private void cambiarContraseniaUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+        String contrasenia = request.getParameter("contrasenia");
+        String contraseniaRep = request.getParameter("contrasenia-repetida");
+
+        if (!contrasenia.equals(contraseniaRep)) {
+            request.setAttribute("mensaje", "Contraseñas no equivalentes");
+            response.sendRedirect("formulario-cambio-contrania?idUsuario=" + idUsuario);
+            return;
+        }
+
+        usuarioDAO.modificarContrasenia(
+                idUsuario,
+                BCrypt.withDefaults().hashToString(12, contrasenia.toCharArray()));
 
         response.sendRedirect("usuarios");
     }
