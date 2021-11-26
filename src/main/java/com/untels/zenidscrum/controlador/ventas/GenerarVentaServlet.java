@@ -6,7 +6,6 @@
 package com.untels.zenidscrum.controlador.ventas;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Administrador
  */
-@WebServlet(name = "GenerarVentaServlet", urlPatterns = {"/GenerarVentaServlet", "/prueba"})
+@WebServlet(name = "GenerarVentaServlet", urlPatterns = {"/GenerarVentaServlet", "/prueba", "/buscar-proforma"})
 public class GenerarVentaServlet extends HttpServlet {
 
     /**
@@ -38,6 +37,10 @@ public class GenerarVentaServlet extends HttpServlet {
         switch (path) {
             case "/prueba":
                 request.getRequestDispatcher("WEB-INF/generar-venta/formulario.jsp")
+                        .forward(request, response);
+                break;
+            case "/buscar-proforma":
+                request.getRequestDispatcher("WEB-INF/venta/buscar-proforma.jsp")
                         .forward(request, response);
                 break;
         }
