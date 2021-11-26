@@ -87,32 +87,10 @@
                                 required>
                         </div>
 
-                        <!-- <div class="collapse col-md-4"  id="ruc" >
-                            <label style="display: block;">Ingrese nro de RUC para la factura:</label>
-
-                            <div style="display:block;">
-                               <input
-                            style="display: inline;"
-                                type="number"
-                                name="ruc"
-                                class="form-control"
-                                value=""
-                                placeholder="RUC"
-                                required>
-                            </div >
-                             <div style="float: right;">
-                                <button  class="btn btn-dark" style="display: inline;" >
-                                    <h6>Validar RUC</h6>
-                                </button>
-                            </div>
-
-                        </div> -->
-
                         <div class="container collapse col-md-9 "id="ruc" >
                             <div class="row align-items-start">
                                 <label >Ingrese nro de RUC para la factura:</label>
                                 <div class="col">
-
 
                                     <input
                                         style="display: inline;"
