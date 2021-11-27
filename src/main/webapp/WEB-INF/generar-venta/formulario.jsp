@@ -21,19 +21,7 @@
         <section id="main">
             <h1>Checkout</h1>
             <h4 style="display: inline;" >Proforma N°</h4>
-            <!--gweorgettteeeee-->
-            <button style="float: right;margin-right: 100px;" class="btn btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><b>Carrito</b></button>
 
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                <div class="offcanvas-header">
-                    <h5 id="offcanvasRightLabel"><b>  TU CARRITO</b> </h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    ...
-                </div>
-            </div>
-            <!--gweorgettteeeee-->
             <div style="display: block;margin-top: 20px;" class="card">
                 <div class="card-body">
                     <form
