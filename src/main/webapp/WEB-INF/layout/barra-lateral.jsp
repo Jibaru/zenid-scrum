@@ -48,6 +48,13 @@
                 <i class="fas fa-copy"></i>
             </a>
         </li>
+        <li>
+            <a href="buscar-proforma">
+                <span>Generar Venta</span>
+                <i class="fas fa-file-alt"></i>
+            </a>
+
+        </li>
         <hr />
         <li>
             <a href="proveedores">
