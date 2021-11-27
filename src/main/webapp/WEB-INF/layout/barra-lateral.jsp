@@ -51,7 +51,7 @@
         <li>
             <a href="buscar-proforma">
                 <span>Generar Venta</span>
-                <i class="fas fa-file-alt"></i>
+                <i class="fas fa-file-export"></i>
             </a>
 
         </li>
