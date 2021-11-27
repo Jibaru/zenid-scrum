@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Administrador
  */
-@WebServlet(name = "GenerarVentaServlet", urlPatterns = {"/GenerarVentaServlet", "/prueba", "/buscar-proforma"})
+@WebServlet(name = "GenerarVentaServlet", urlPatterns = {"/GenerarVentaServlet",
+    "/prueba",
+    "/buscar-proforma"})
 public class GenerarVentaServlet extends HttpServlet {
 
     /**
