@@ -74,7 +74,6 @@
                                 name="nombre-representante"
                                 class="form-control"
                                 placeholder="Fecha"
-                                value=""
                                 required>
                         </div>
                         <div class="collapse col-md-5" id="dni" >
