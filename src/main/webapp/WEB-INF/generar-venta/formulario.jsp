@@ -39,7 +39,7 @@
                             <div class="form-group mb-2 col-md-6">
                                 <label ></label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     name="correo-electronico"
                                     class="form-control"
                                     placeholder="Apellido Paterno"
