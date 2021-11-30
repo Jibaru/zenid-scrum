@@ -151,4 +151,60 @@ public class SQLProformaDAO implements ProformaDAO {
         return filasModificadas > 0;
     }
 
+    @Override
+    public List<Proforma> listarPorNombreReferencial(String nombreReferencial) {
+        String sql = "SELECT * FROM proformas";
+
+        if (nombreReferencial != null) {
+            sql += " WHERE nombre_referencial LIKE '" + nombreReferencial + "%'";
+        }
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Proforma> proformas = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Proforma p = new Proforma();
+                p.setIdProforma(rs.getInt("id_proforma"));
+                p.setNombreReferencial(rs.getString("nombre_referencial"));
+                p.setFechaCreacion(rs.getDate("fecha_creacion").toLocalDate());
+
+                proformas.add(p);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return proformas;
+
+    }
+
 }
