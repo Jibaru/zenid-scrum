@@ -39,9 +39,11 @@
                     <div class="card-body">
                         <form
                             class="row"
-                            action=""
-                            action = "prueba"
+                            action="generar-venta"
                             method="POST">
+
+                            <input type="hidden" name="idProforma" value="<%=proforma.getIdProforma()%>" />
+
                             <div class="form-group mb-2 col-md-">
                                 <label>Nombre del cliente</label>
                                 <input
@@ -89,8 +91,7 @@
                                     class="form-control"
                                     placeholder="DNI"
                                     min="8"
-                                    max="8"
-                                    required>
+                                    max="8">
                             </div>
 
                             <div class="container collapse col-md-9 " id="ruc" >
@@ -103,8 +104,7 @@
                                             id="ruc-input"
                                             name="ruc"
                                             class="form-control"
-                                            placeholder="RUC"
-                                            required>
+                                            placeholder="RUC">
                                     </div>
                                     <div class="col">
                                         <button  id="consulta-ruc" class="btn btn-dark" type="button" style="display: inline;" >
@@ -131,20 +131,20 @@
                             <div>
                                 <label style="display: block;">Tipo de Documento</label>
                                 <div class="form-check" style="display: inline-block; margin-right: 60px;">
-                                    <input class="form-check-input" value="bol" onchange="mostrar(this.value)" type="radio" name="tipo-documento"  >
+                                    <input class="form-check-input" value="boleta" onchange="mostrar(this.value)" type="radio" name="tipo-documento"  >
                                     <label class="form-check-label" for="tipo-documento">
                                         Boleta
                                     </label>
                                 </div>
                                 <div class="form-check" style="display: inline-block;" >
-                                    <input class="form-check-input" onchange="mostrar(this.value)" type="radio" name="tipo-documento" >
+                                    <input class="form-check-input" value="factura" onchange="mostrar(this.value)" type="radio" name="tipo-documento" >
                                     <label class="form-check-label" for="tipo-documento">
                                         Factura
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group mb-2">
-                                <button id="generar-venta-btn" class="btn btn-dark" style="float: right;" disabled>
+                                <button id="generar-venta-btn" class="btn btn-dark" style="float: right;" type="submit">
                                     Generar Venta
                                 </button>
 
@@ -244,7 +244,7 @@
             document.getElementById("fecha").value = hoy.toLocaleDateString();
 
             function mostrar(dato) {
-                if (dato == "bol") {
+                if (dato == "boleta") {
                     document.getElementById("dni").style.display = "block";
                     document.getElementById("ruc").style.display = "none";
                     generarVentaBtn.disabled = false;
