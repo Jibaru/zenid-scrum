@@ -266,7 +266,7 @@
             var rucInput = document.getElementById("ruc-input");
 
 
-            // Ejemplo ruc válido: 20131312955
+            // Ejemplo ruc válido
 
             var rucModal = new bootstrap.Modal(document.getElementById('ruc-modal'), {
                 keyboard: false
