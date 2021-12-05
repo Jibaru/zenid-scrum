@@ -130,14 +130,14 @@
 
                             <div>
                                 <label style="display: block;">Tipo de Documento</label>
-                                <div class="form-check" style="display: inline-block; margin-right: 60px;">
+                                <div class="form-check" style="display: inline-block; margin-right: 60px;" id="radioboleta">
                                     <input class="form-check-input" value="boleta" onchange="mostrar(this.value)" type="radio" name="tipo-documento"  >
                                     <label class="form-check-label" for="tipo-documento">
                                         Boleta
                                     </label>
                                 </div>
                                 <div class="form-check" style="display: inline-block;" >
-                                    <input class="form-check-input" value="factura" onchange="mostrar(this.value)" type="radio" name="tipo-documento" >
+                                    <input class="form-check-input" value="factura" onchange="mostrar(this.value)" id="radiofactura" type="radio" name="tipo-documento" >
                                     <label class="form-check-label" for="tipo-documento">
                                         Factura
                                     </label>
@@ -232,13 +232,14 @@
                         <% }%>
                     </div>
                 </div>
+                <input id="limite" name="limite" style="visibility: hidden" value="<%=total%>">
             </section>
         </main>
         <script>
             const tiempoTranscurrido = Date.now();
             const hoy = new Date(tiempoTranscurrido);
             const generarVentaBtn = document.getElementById("generar-venta-btn");
-
+            var limite = document.getElementById("limite").value;
             // hoy.toLocaleDateString();
             console.log(hoy.toLocaleDateString());
             document.getElementById("fecha").value = hoy.toLocaleDateString();
@@ -254,6 +255,13 @@
                     generarVentaBtn.disabled = true;
                 }
 
+            }
+
+            if (limite >= 700) {
+                document.getElementById("ruc").style.display = "block"; //div de ruc con boton
+                document.getElementById("dni").style.visibility = "hidden"; //div dni
+                document.getElementById("radioboleta").style.visibility = "hidden";//oculttar la opcion de boleta
+                document.getElementById("radiofactura").checked = true;
             }
         </script>
         <script>
