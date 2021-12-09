@@ -23,3 +23,4 @@ sudo vim /etc/environment
 En Windows:
 
 Ir a la configuración de PC y establecer las variables de entorno del sistema (PATH)
+
