@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
             "/GenerarReporte",
             "/buscar-venta-reporte"
         })
-public class GenerarReporte extends HttpServlet {
+public class GenerarReporteServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
