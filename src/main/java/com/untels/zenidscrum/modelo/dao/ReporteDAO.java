@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ReporteDAO {
 
-    public List<Venta> listarPorNombreReferencial(String inicio, String fin);
+    public List<Venta> listarPorFecha(String inicio, String fin);
 
 }

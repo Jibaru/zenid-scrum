@@ -19,12 +19,12 @@ public class SQLReporteDAO implements ReporteDAO {
     }
 
     @Override
-    public List<Venta> listarPorNombreReferencial(String inicio, String fin) {
+    public List<Venta> listarPorFecha(String inicio, String fin) {
         String sql = "SELECT * FROM ventas";
 
-//        if (nombreReferencial != null) {
-//            sql += " WHERE nombre_referencial LIKE '" + nombreReferencial + "%'";
-//        }
+        if (inicio != null) {
+            sql += " WHERE fecha_emision BETWEEN '" + inicio + "' AND '" + fin + "'";
+        }
         Connection conn = conexion.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;

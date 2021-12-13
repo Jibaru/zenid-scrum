@@ -97,9 +97,9 @@ public class GenerarReporteServlet extends HttpServlet {
     ) throws ServletException, IOException {
         String inicio = request.getParameter("fechainicio");
         String fin = request.getParameter("fechafinal");
-        //String nombreRef = request.getParameter("nombre-referencial");
-        request.setAttribute("ventas", reporteDAO.listarPorNombreReferencial(inicio, fin));
-        //request.setAttribute("proformas", proformaDAO.listarPorNombreReferencial(nombreRef));
+
+        request.setAttribute("ventas", reporteDAO.listarPorFecha(inicio, fin));
+
         request.getRequestDispatcher("WEB-INF/generar-venta-reporte/index.jsp")
                 .forward(request, response);
     }

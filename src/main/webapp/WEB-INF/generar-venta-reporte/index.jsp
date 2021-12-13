@@ -20,7 +20,7 @@
                 <h1>Buscar Venta</h1>
                 <div class="card">
                     <div class="card-body">
-                        <form class="row" action="buscar-proforma" method="get">
+                        <form class="row" action="buscar-venta-reporte" method="get">
                             <div class="row justify-content-center">
                                 <div class="col-6">
                                     <div class="row align-items-start">
@@ -64,6 +64,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <% if (ventas != null) {  %>
                                     <%for (Venta v : ventas) {%>
                                     <tr>
                                         <td><%=v.getIdVenta()%></td>
@@ -72,6 +73,7 @@
                                         <td><%=v.getFechaEmision()%></td>
 
                                     </tr>
+                                    <% }%>
                                     <% }%>
                                 </tbody>
                             </table>
