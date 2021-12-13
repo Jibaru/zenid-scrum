@@ -55,6 +55,12 @@
             </a>
 
         </li>
+        <li>
+            <a href="buscar-venta-reporte">
+                <span>Generar Reporte</span>
+                <i class="fas fa-copy"></i>
+            </a>
+        </li>
         <hr />
         <li>
             <a href="proveedores">
