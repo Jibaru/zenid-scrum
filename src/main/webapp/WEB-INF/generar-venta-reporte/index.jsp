@@ -28,14 +28,14 @@
                                             <label for="fechafinal">Fecha Inicio</label>
                                             <input class="form-control"
                                                    type="text"
-                                                   placeholder="1998-12-12"
+                                                   placeholder="yyyy-mm-dd"
                                                    name="fechainicio">
                                         </div>
                                         <div class="col">
                                             <label for="fechafinal">Fecha Final</label>
                                             <input class="form-control"
                                                    type="text"
-                                                   placeholder="1999-12-12"
+                                                   placeholder="yyyy-mm-dd"
                                                    name="fechafinal">
                                         </div>
                                     </div>
