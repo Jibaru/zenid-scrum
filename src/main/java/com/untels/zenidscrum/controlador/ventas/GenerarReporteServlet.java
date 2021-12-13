@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
         name = "GenerarReporte",
         urlPatterns = {
             "/GenerarReporte",
-            "/buscar-venta-reporte"
+            "/buscar-venta-reporte",
+            "/reporte"
         })
 public class GenerarReporteServlet extends HttpServlet {
 
@@ -48,7 +49,10 @@ public class GenerarReporteServlet extends HttpServlet {
             case "/buscar-venta-reporte":
                 buscarventareporte(request, response);
                 break;
-
+            case "/reporte":
+                request.getRequestDispatcher("WEB-INF/generar-venta-reporte/index.jsp")
+                        .forward(request, response);
+                break;
         }
     }
 
