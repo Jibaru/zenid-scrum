@@ -1,4 +1,9 @@
-
+<%@page import="com.untels.zenidscrum.modelo.bean.Venta"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%
+    List<Venta> ventas = (ArrayList<Venta>) request.getAttribute("ventas");
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -37,7 +42,7 @@
                                 </div>
                                 <div class="col-4" style="display: flex;
                                      align-items:flex-end;">
-                                    <button class="btn btn-primary me-md-6 w-50" 
+                                    <button class="btn btn-primary me-md-6 w-50"
                                             type="submit">Buscar</button>
                                 </div>
                             </div>
@@ -53,17 +58,21 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nombre referencial</th>
+                                        <th>Tipo Comprobante</th>
                                         <th>Fecha emisión</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <%for (Venta v : ventas) {%>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><%=v.getIdVenta()%></td>
+                                        <td><%=v.getNombres()%> <%=v.getApePaterno()%> <%=v.getApeMaterno()%></td>
+                                        <td><%=v.getTipoComprobante()%></td>
+                                        <td><%=v.getFechaEmision()%></td>
 
                                     </tr>
+                                    <% }%>
                                 </tbody>
                             </table>
                         </div>

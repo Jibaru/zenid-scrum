@@ -1,7 +1,13 @@
 package com.untels.zenidscrum.controlador.ventas;
 
+import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.dao.ReporteDAO;
+import com.untels.zenidscrum.modelo.dao.SQLReporteDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +21,16 @@ import javax.servlet.http.HttpServletResponse;
             "/buscar-venta-reporte"
         })
 public class GenerarReporteServlet extends HttpServlet {
+
+    private final ReporteDAO reporteDAO;
+
+    public GenerarReporteServlet() {
+        SQLConexion conexion = new SQLConexion();
+        reporteDAO = new SQLReporteDAO(conexion);
+
+//        proformaDAO = new SQLProformaDAO(conexion);
+//        ventaDAO = new SQLVentaDAO(conexion);
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -79,8 +95,10 @@ public class GenerarReporteServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
+        String inicio = request.getParameter("fechainicio");
+        String fin = request.getParameter("fechafinal");
         //String nombreRef = request.getParameter("nombre-referencial");
-
+        request.setAttribute("ventas", reporteDAO.listarPorNombreReferencial(inicio, fin));
         //request.setAttribute("proformas", proformaDAO.listarPorNombreReferencial(nombreRef));
         request.getRequestDispatcher("WEB-INF/generar-venta-reporte/index.jsp")
                 .forward(request, response);
