@@ -20,21 +20,24 @@
                                 <div class="col-6">
                                     <div class="row align-items-start">
                                         <div class="col">
+                                            <label for="fechafinal">Fecha Inicio</label>
                                             <input class="form-control"
                                                    type="text"
-                                                   placeholder="Fecha Inicio"
+                                                   placeholder="1998-12-12"
                                                    name="fechainicio">
                                         </div>
                                         <div class="col">
+                                            <label for="fechafinal">Fecha Final</label>
                                             <input class="form-control"
                                                    type="text"
-                                                   placeholder="Fecha Final"
+                                                   placeholder="1999-12-12"
                                                    name="fechafinal">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-4">
-                                    <button class="btn btn-primary me-md-6 w-50"
+                                <div class="col-4" style="display: flex;
+                                     align-items:flex-end;">
+                                    <button class="btn btn-primary me-md-6 w-50" 
                                             type="submit">Buscar</button>
                                 </div>
                             </div>
