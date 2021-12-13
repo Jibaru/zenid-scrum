@@ -78,7 +78,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button type="button" class="btn btn-dark btn-lg" style="float: right">Generar Reporte</button>
+                        <a class="btn btn-dark btn-lg" style="float: right" href="reporte">
+                            Generar Reporte
+                        </a>
                     </div>
                 </div>
             </section>
