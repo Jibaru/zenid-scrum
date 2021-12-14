@@ -79,7 +79,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <a class="btn btn-dark btn-lg" style="float: right" href="reporte">
+                        <a class="btn btn-dark btn-lg" style="float: right" target="_blank" href="reporte">
                             Generar Reporte
                         </a>
                     </div>
