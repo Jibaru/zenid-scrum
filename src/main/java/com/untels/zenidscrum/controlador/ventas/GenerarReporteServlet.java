@@ -1,6 +1,7 @@
 package com.untels.zenidscrum.controlador.ventas;
 
 import com.untels.zenidscrum.acceso.datos.SQLConexion;
+import com.untels.zenidscrum.modelo.bean.Venta;
 import com.untels.zenidscrum.modelo.dao.ReporteDAO;
 import com.untels.zenidscrum.modelo.dao.SQLReporteDAO;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -101,9 +103,13 @@ public class GenerarReporteServlet extends HttpServlet {
     ) throws ServletException, IOException {
         String inicio = request.getParameter("fechainicio");
         String fin = request.getParameter("fechafinal");
+        List<Venta> vr = reporteDAO.listarPorFecha(inicio, fin);
 
         request.setAttribute("ventas", reporteDAO.listarPorFecha(inicio, fin));
-
+        if (vr.isEmpty()) {
+            vr = null;
+            request.setAttribute("ventas", vr);
+        }
         request.getRequestDispatcher("WEB-INF/generar-venta-reporte/index.jsp")
                 .forward(request, response);
     }

@@ -50,6 +50,7 @@
                     </div>
                 </div>
                 <h2 class="mt-2 mb-2">Ventas coincidentes</h2>
+                <% if (!(ventas == null)) {  %>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -64,7 +65,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% if (ventas != null) {  %>
+
                                     <%for (Venta v : ventas) {%>
                                     <tr>
                                         <td><%=v.getIdVenta()%></td>
@@ -74,7 +75,7 @@
 
                                     </tr>
                                     <% }%>
-                                    <% }%>
+
                                 </tbody>
                             </table>
                         </div>
@@ -83,6 +84,11 @@
                         </a>
                     </div>
                 </div>
+                <% } else {%>
+                <div class="alert alert-primary" role="alert">
+                    NO HAY VENTAS EN ESE PERIODO
+                </div>
+                <%}%>
             </section>
         </main>
 
