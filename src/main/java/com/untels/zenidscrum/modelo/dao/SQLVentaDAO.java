@@ -8,15 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SQLVentaDAO implements VentaDAO{
+public class SQLVentaDAO implements VentaDAO {
 
     private final Conexion conexion;
 
     public SQLVentaDAO(Conexion conexion) {
         this.conexion = conexion;
     }
-   
+
     @Override
     public boolean Crear(Venta v) {
         String sql = "INSERT INTO ventas ("
@@ -27,7 +29,7 @@ public class SQLVentaDAO implements VentaDAO{
                 + "numero_comprobante,"
                 + "fecha_emision,"
                 + "despachado, "
-		+ "id_proforma) "
+                + "id_proforma) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = conexion.getConnection();
@@ -99,9 +101,8 @@ public class SQLVentaDAO implements VentaDAO{
 
             rs = ps.executeQuery();
 
-
             if (rs.next()) {
-                
+
                 v = new Venta();
                 v.setIdVenta(rs.getInt("id_venta"));
                 v.setNombres(rs.getString("nombres"));
@@ -140,7 +141,7 @@ public class SQLVentaDAO implements VentaDAO{
             }
         }
 
-        return v;    
+        return v;
     }
 
     @Override
@@ -159,9 +160,8 @@ public class SQLVentaDAO implements VentaDAO{
 
             rs = ps.executeQuery();
 
-
             if (rs.next()) {
-                
+
                 idproforma = rs.getInt("id_proforma");
 
             }
@@ -194,6 +194,60 @@ public class SQLVentaDAO implements VentaDAO{
 
         return idproforma;
     }
-   
-    
+
+    @Override
+    public List<Venta> listarTodos() {
+        String sql = "SELECT * FROM ventas";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Venta> ventas = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Venta v = new Venta();
+                v.setIdVenta(rs.getInt("id_venta"));
+                v.setApePaterno(rs.getString("ape_paterno"));
+                v.setApeMaterno(rs.getString("ape_materno"));
+                v.setNombres(rs.getString("nombres"));
+                v.setTipoComprobante(rs.getString("tipo_comprobante"));
+                v.setNumeroComprobante(rs.getString("numero_comprobante"));
+                v.setDespachado(rs.getBoolean("despachado"));
+                v.setFechaEmision(rs.getDate("fecha_emision").toLocalDate());
+                ventas.add(v);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return ventas;
+    }
+
 }

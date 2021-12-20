@@ -53,6 +53,12 @@
                 <span>Generar Venta</span>
                 <i class="fas fa-file-export"></i>
             </a>
+        </li>
+        <li>
+            <a href="despacho-venta">
+                <span>Despachar Venta</span>
+                <i class="fas fa-box-open"></i>
+            </a>
 
         </li>
         <li>
