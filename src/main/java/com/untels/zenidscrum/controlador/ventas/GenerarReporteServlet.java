@@ -52,7 +52,9 @@ public class GenerarReporteServlet extends HttpServlet {
                 buscarventareporte(request, response);
                 break;
             case "/reporte":
-                buscarventareporte(request, response);
+                request.getRequestDispatcher("WEB-INF/generar-venta-reporte/reporte.jsp")
+                        .forward(request, response);
+                // buscarventareporte(request, response);
                 break;
         }
     }
