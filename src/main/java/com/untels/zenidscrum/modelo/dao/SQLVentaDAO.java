@@ -250,4 +250,82 @@ public class SQLVentaDAO implements VentaDAO {
         return ventas;
     }
 
+    @Override
+    public List<Venta> listarPorTerminoBoletaFactura(
+            String termino,
+            boolean boleta,
+            boolean factura
+    ) {
+        String sql = "SELECT * FROM ventas WHERE ("
+                + "nombres LIKE ? OR ape_paterno LIKE ? OR ape_materno LIKE ? ) "
+                + "AND (tipo_comprobante = ? OR tipo_comprobante = ?)";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Venta> ventas = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(sql);
+
+            ps.setString(1, termino + "%");
+            ps.setString(2, termino + "%");
+            ps.setString(3, termino + "%");
+
+            if (boleta) {
+                ps.setString(4, "boleta");
+            } else {
+                ps.setString(4, "%");
+            }
+
+            if (factura) {
+                ps.setString(5, "factura");
+            } else {
+                ps.setString(5, "%");
+            }
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Venta v = new Venta();
+                v.setIdVenta(rs.getInt("id_venta"));
+                v.setApePaterno(rs.getString("ape_paterno"));
+                v.setApeMaterno(rs.getString("ape_materno"));
+                v.setNombres(rs.getString("nombres"));
+                v.setTipoComprobante(rs.getString("tipo_comprobante"));
+                v.setNumeroComprobante(rs.getString("numero_comprobante"));
+                v.setDespachado(rs.getBoolean("despachado"));
+                v.setFechaEmision(rs.getDate("fecha_emision").toLocalDate());
+                ventas.add(v);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return ventas;
+    }
+
 }

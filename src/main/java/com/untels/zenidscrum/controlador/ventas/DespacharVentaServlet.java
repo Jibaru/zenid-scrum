@@ -90,12 +90,28 @@ public class DespacharVentaServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
-        List<Venta> ventas = ventaDAO.listarTodos();
+        String termino = request.getParameter("termino");
+        String boleta = request.getParameter("boleta");
+        String factura = request.getParameter("factura");
 
-        request.setAttribute("ventas", ventas);
+        if (termino != null || boleta != null || factura != null) {
+            List<Venta> ventas = ventaDAO.listarPorTerminoBoletaFactura(
+                    (termino != null ? termino : ""),
+                    boleta != null,
+                    factura != null);
 
-        request.getRequestDispatcher("WEB-INF/despachar-venta/index.jsp")
-                .forward(request, response);
+            request.setAttribute("ventas", ventas);
+
+            request.getRequestDispatcher("WEB-INF/despachar-venta/index.jsp")
+                    .forward(request, response);
+        } else {
+            List<Venta> ventas = ventaDAO.listarTodos();
+
+            request.setAttribute("ventas", ventas);
+
+            request.getRequestDispatcher("WEB-INF/despachar-venta/index.jsp")
+                    .forward(request, response);
+        }
     }
 
 }

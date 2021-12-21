@@ -22,20 +22,26 @@
                 <h1>Buscar ventas</h1>
                 <div class="card">
                     <div class="card-body">
-                        <form class="row d-flex justify-content align-items-center" action="buscar-ventas" method="get">
+                        <form class="row d-flex justify-content align-items-center"
+                              action="despacho-venta" method="get">
                             <div class="form-group col-md-10">
                                 <label>Término</label>
                                 <input class="form-control"
                                        type="text"
                                        placeholder="Término"
-                                       name="termino">
+                                       name="termino"
+                                       <% if (request.getParameter("termino") != null) {%>
+                                       value="<%=request.getParameter("termino")%>">
+                                <% } %>
                             </div>
                             <div class="form-group col-md-2">
                                 <input class="form-check-input"
                                        type="checkbox"
                                        value="boleta"
                                        name="boleta"
-                                       checked>
+                                       <% if (request.getParameter("boleta") != null) {%>
+                                       checked
+                                       <% } %>>
                                 <label class="form-check-label">
                                     Boleta
                                 </label><br>
@@ -43,7 +49,9 @@
                                        type="checkbox"
                                        value="factura"
                                        name="factura"
-                                       checked>
+                                       <% if (request.getParameter("factura") != null) {%>
+                                       checked
+                                       <% } %>>
                                 <label class="form-check-label">
                                     Factura
                                 </label>
