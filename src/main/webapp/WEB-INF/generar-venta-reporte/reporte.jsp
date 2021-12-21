@@ -12,7 +12,7 @@
 
 
 <%
-    response.setContentType("application/pdf");
+    // response.setContentType("application/pdf");
     response.setHeader("Content-Type",
             "application/pdf");
     try {
@@ -28,6 +28,10 @@
         documento.add(new Paragraph("DOCUEMTNO DE PRUEBA XDDDDDDDDDDDDDDDDD"));
         //documento.add(new Paragraph(new Date().toString());
         documento.add(new Paragraph("\n"));
+        //insertar con HTML
+        HTMLWorker htmlp = new HTMLWorker(documento);
+        String str = "<h1>SOMOOOS</h1>";
+        htmlp.parse(new StringReader(str));
 
         documento.close();
 
