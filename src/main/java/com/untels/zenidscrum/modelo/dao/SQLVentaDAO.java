@@ -328,4 +328,40 @@ public class SQLVentaDAO implements VentaDAO {
         return ventas;
     }
 
+    @Override
+    public boolean despachar(int idVenta) {
+        String sql = "UPDATE ventas SET despachado='1' WHERE id_venta=?";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idVenta);
+
+            filasModificadas = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
+    }
+
 }

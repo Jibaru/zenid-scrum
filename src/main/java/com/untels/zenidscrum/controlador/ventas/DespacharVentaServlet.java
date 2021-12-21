@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(
         name = "DespacharVentaServlet",
         urlPatterns = {
-            "/despacho-venta"
+            "/despacho-venta",
+            "/despachar-venta"
         }
 )
 public class DespacharVentaServlet extends HttpServlet {
@@ -43,7 +44,9 @@ public class DespacharVentaServlet extends HttpServlet {
             case "/despacho-venta":
                 despachoVenta(request, response);
                 break;
-
+            case "/despachar-venta":
+                despacharVenta(request, response);
+                break;
         }
     }
 
@@ -112,6 +115,17 @@ public class DespacharVentaServlet extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/despachar-venta/index.jsp")
                     .forward(request, response);
         }
+    }
+
+    private void despacharVenta(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idVenta = Integer.parseInt(request.getParameter("idVenta"));
+
+        ventaDAO.despachar(idVenta);
+
+        response.sendRedirect("despacho-venta");
     }
 
 }

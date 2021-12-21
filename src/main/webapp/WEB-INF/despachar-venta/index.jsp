@@ -31,8 +31,8 @@
                                        placeholder="Término"
                                        name="termino"
                                        <% if (request.getParameter("termino") != null) {%>
-                                       value="<%=request.getParameter("termino")%>">
-                                <% } %>
+                                       value="<%=request.getParameter("termino")%>"
+                                       <% } %>>
                             </div>
                             <div class="form-group col-md-2">
                                 <input class="form-check-input"
@@ -41,7 +41,7 @@
                                        name="boleta"
                                        <% if (request.getParameter("boleta") != null) {%>
                                        checked
-                                       <% } %>>
+                                       <% } %>/>
                                 <label class="form-check-label">
                                     Boleta
                                 </label><br>
@@ -51,7 +51,7 @@
                                        name="factura"
                                        <% if (request.getParameter("factura") != null) {%>
                                        checked
-                                       <% } %>>
+                                       <% } %>/>
                                 <label class="form-check-label">
                                     Factura
                                 </label>
@@ -76,6 +76,7 @@
                                         <th>Apellido Materno</th>
                                         <th>Tipo Comprobante</th>
                                         <th>Nº Comprobante</th>
+                                        <th>Estado</th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -90,12 +91,25 @@
                                         <td><%=v.getTipoComprobante()%></td>
                                         <td><%=v.getNumeroComprobante()%></td>
                                         <td>
+                                            <% if (v.isDespachado()) {%>
+                                            <span class="badge bg-dark">
+                                                Despachado
+                                            </span>
+                                            <% } else { %>
+                                            <span class="badge bg-warning">
+                                                Sin despachar
+                                            </span>
+                                            <% }%>
+                                        </td>
+                                        <td>
                                             <a class="btn btn-primary" href="ver-venta?idVenta=<%=v.getIdVenta()%>">
                                                 Ver Venta
                                             </a>
+                                            <% if (!v.isDespachado()) {%>
                                             <a class="btn btn-success" href="despachar-venta?idVenta=<%=v.getIdVenta()%>">
                                                 Despachar
                                             </a>
+                                            <% } %>
                                         </td>
                                     </tr>
                                     <% } %>

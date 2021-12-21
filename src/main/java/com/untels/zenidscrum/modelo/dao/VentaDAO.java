@@ -14,4 +14,6 @@ public interface VentaDAO {
     public List<Venta> listarTodos();
 
     public List<Venta> listarPorTerminoBoletaFactura(String termino, boolean boleta, boolean factura);
+
+    public boolean despachar(int idVenta);
 }
