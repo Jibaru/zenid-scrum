@@ -16,4 +16,10 @@ public interface ProductoDAO {
     public List<Producto> listarStockBajo();
 
     public boolean crear(Producto p);
+
+    public boolean modificar(Producto p);
+
+    public boolean inhabilitar(int idProducto);
+
+    public boolean habilitar(int idProducto);
 }

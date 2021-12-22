@@ -133,6 +133,13 @@ public class ProductoServlet extends HttpServlet {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws ServletException, IOException {
+        String idProducto = request.getParameter("idProducto");
+
+        if (idProducto != null) {
+            Producto producto = productoDAO.obtenerPorId(Integer.parseInt(idProducto));
+            request.setAttribute("producto", producto);
+        }
+
         List<Proveedor> proveedores = proveedorDAO.listarTodos();
 
         request.setAttribute("proveedores", proveedores);
@@ -198,16 +205,69 @@ public class ProductoServlet extends HttpServlet {
 
     }
 
-    private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void modificarProducto(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        String idProductoStr = request.getParameter("idProducto");
+        String nombre = request.getParameter("nombre");
+        String codBarras = request.getParameter("cod-barras");
+        String descripcion = request.getParameter("descripcion");
+        String marca = request.getParameter("marca");
+        String familia = request.getParameter("familia");
+        String linea = request.getParameter("linea");
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        int stockMinimo = Integer.parseInt(request.getParameter("stock-minimo"));
+        float igv = Float.parseFloat(request.getParameter("igv"));
+        float precioCompraUnitario = Float.parseFloat(request.getParameter("precio-compra-unitario"));
+        int idProveedor = Integer.parseInt(request.getParameter("proveedor"));
+
+        Proveedor prov = proveedorDAO.obtenerPorId(idProveedor);
+
+        Producto prod = new Producto();
+        prod.setIdProducto(Integer.parseInt(idProductoStr));
+        prod.setNombre(nombre);
+        prod.setCodBarras(codBarras);
+        prod.setDescripcion(descripcion);
+        prod.setMarca(marca);
+        prod.setFamilia(familia);
+        prod.setLinea(linea);
+        prod.setStock(stock);
+        prod.setStockMinimo(stockMinimo);
+        prod.setIgv(igv);
+        prod.setPrecioCompraUnitario(precioCompraUnitario);
+        prod.setProveedor(prov);
+
+        if (productoDAO.modificar(prod)) {
+            // TODO: Actualizar y/o crear precios
+
+            response.sendRedirect("formulario-producto?idProducto=" + idProductoStr);
+        } else {
+            response.sendRedirect("formulario-producto");
+        }
+
     }
 
-    private void inhabilitarProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void inhabilitarProducto(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+
+        productoDAO.inhabilitar(idProducto);
+
+        response.sendRedirect("productos");
     }
 
-    private void habilitarProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void habilitarProducto(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+
+        productoDAO.habilitar(idProducto);
+
+        response.sendRedirect("productos");
     }
 
 }

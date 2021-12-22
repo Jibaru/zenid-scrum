@@ -347,8 +347,8 @@ public class SQLProductoDAO implements ProductoDAO {
         String sql = "SELECT * FROM productos WHERE id_producto = ?";
 
         Connection conn = conexion.getConnection();
-        PreparedStatement ps = null, ps2 = null;
-        ResultSet rs = null, rs2 = null;
+        PreparedStatement ps = null, ps2 = null, ps3 = null;
+        ResultSet rs = null, rs2 = null, rs3 = null;
         Producto p = null;
 
         try {
@@ -385,6 +385,20 @@ public class SQLProductoDAO implements ProductoDAO {
                     precio.setPrecioUnitario(rs2.getFloat("precio_unitario"));
                     precio.setUnidad(rs2.getString("unidad"));
                     precios.add(precio);
+                }
+
+                String sql3 = "SELECT * FROM proveedores WHERE id_proveedor = ?";
+
+                ps3 = conn.prepareStatement(sql3);
+                ps3.setInt(1, rs.getInt("id_proveedor"));
+                rs3 = ps3.executeQuery();
+
+                if (rs3.next()) {
+                    Proveedor pr = new Proveedor();
+                    pr.setIdProveedor(rs3.getInt("id_proveedor"));
+                    pr.setNombre(rs3.getString("nombre"));
+                    pr.setCorreoElectronico(rs3.getString("correo_electronico"));
+                    p.setProveedor(pr);
                 }
                 p.setPrecios(precios);
             }
@@ -550,6 +564,111 @@ public class SQLProductoDAO implements ProductoDAO {
             if (rs != null) {
                 try {
                     rs.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
+    }
+
+    @Override
+    public boolean modificar(Producto p) {
+        String sql = "UPDATE productos SET "
+                + "nombre=?, "
+                + "cod_barras=?, "
+                + "descripcion=?, "
+                + "marca=?, "
+                + "familia=?, "
+                + "linea=?, "
+                + "stock=?, "
+                + "id_proveedor=?, "
+                + "igv=?, "
+                + "stock_minimo=?, "
+                + "precio_compra_unitario=? "
+                + "WHERE id_producto=?";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getCodBarras());
+            ps.setString(3, p.getDescripcion());
+            ps.setString(4, p.getMarca());
+            ps.setString(5, p.getFamilia());
+            ps.setString(6, p.getLinea());
+            ps.setInt(7, p.getStock());
+            ps.setInt(8, p.getProveedor().getIdProveedor());
+            ps.setFloat(9, p.getIgv());
+            ps.setInt(10, p.getStockMinimo());
+            ps.setFloat(11, p.getPrecioCompraUnitario());
+            ps.setInt(12, p.getIdProducto());
+
+            filasModificadas = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+            }
+        }
+
+        return filasModificadas > 0;
+    }
+
+    @Override
+    public boolean inhabilitar(int idProducto) {
+        return modificarHabilitado(idProducto, false);
+    }
+
+    @Override
+    public boolean habilitar(int idProducto) {
+        return modificarHabilitado(idProducto, true);
+    }
+
+    private boolean modificarHabilitado(int idProducto, boolean habilitado) {
+        String sql = "UPDATE productos SET habilitado=? WHERE id_producto=?";
+
+        Connection conn = conexion.getConnection();
+        PreparedStatement ps = null;
+        int filasModificadas = 0;
+
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setBoolean(1, habilitado);
+            ps.setInt(2, idProducto);
+
+            filasModificadas = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
                 } catch (SQLException ex) {
                     System.out.println(ex);
                 }
