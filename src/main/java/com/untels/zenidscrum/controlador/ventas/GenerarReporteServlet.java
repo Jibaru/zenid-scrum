@@ -4,11 +4,10 @@ import com.untels.zenidscrum.acceso.datos.SQLConexion;
 import com.untels.zenidscrum.modelo.bean.Venta;
 import com.untels.zenidscrum.modelo.dao.ReporteDAO;
 import com.untels.zenidscrum.modelo.dao.SQLReporteDAO;
+import com.untels.zenidscrum.modelo.dao.SQLVentaDAO;
+import com.untels.zenidscrum.modelo.dao.VentaDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,13 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 public class GenerarReporteServlet extends HttpServlet {
 
     private final ReporteDAO reporteDAO;
+    private final VentaDAO ventadao;
 
     public GenerarReporteServlet() {
         SQLConexion conexion = new SQLConexion();
         reporteDAO = new SQLReporteDAO(conexion);
 
 //        proformaDAO = new SQLProformaDAO(conexion);
-//        ventaDAO = new SQLVentaDAO(conexion);
+        ventadao = new SQLVentaDAO(conexion);
     }
 
     /**
@@ -52,6 +52,16 @@ public class GenerarReporteServlet extends HttpServlet {
                 buscarventareporte(request, response);
                 break;
             case "/reporte":
+                int tamanio = Integer.parseInt(request.getParameter("tamanio"));
+                //List<Venta> ven = (Array<Venta>) request.getAttribute("ventas");
+                List<Venta> venta = new ArrayList();
+                int idventa;
+                for (int i = 0; i < tamanio; i++) {
+                    idventa = Integer.parseInt(request.getParameter("ide" + i));
+                    Venta ventaasdasd = ventadao.obtenerPorId(idventa);
+                    venta.add(ventaasdasd);
+                }
+                request.setAttribute("ventasrep", venta);
                 request.getRequestDispatcher("WEB-INF/generar-venta-reporte/reporte.jsp")
                         .forward(request, response);
                 // buscarventareporte(request, response);

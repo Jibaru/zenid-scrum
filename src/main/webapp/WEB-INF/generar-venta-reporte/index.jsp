@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%
     List<Venta> ventas = (ArrayList<Venta>) request.getAttribute("ventas");
+    request.setAttribute("ventas1", ventas);
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -79,9 +80,18 @@
                                 </tbody>
                             </table>
                         </div>
-                        <a class="btn btn-dark btn-lg" style="float: right" target="_blank" href="reporte">
-                            Generar Reporte
-                        </a>
+                        <form action="reporte" >
+                            <input name="tamanio" type="hidden" value="<%=ventas.size()%>" >
+                            <%for (int i = 0; i < ventas.size(); i++) {%>
+                            <input name="ide<%=i%>" type="hidden" value="<%=ventas.get(i).getIdVenta()%>" >
+
+                            <%}%>
+                            <button class="btn btn-dark btn-lg" style="float: right" formtarget="blank">Generar Reporte</button>
+                            <!--<a  target="_blank" href="reporte">
+
+                            </a-->
+                        </form>
+
                     </div>
                 </div>
                 <% } else {%>
