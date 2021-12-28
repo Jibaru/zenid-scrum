@@ -13,47 +13,57 @@
 <%@page import="com.lowagie.text.pdf.PdfPTable" %>
 <%@page import="java.time.LocalDate" %>
 
-<%
-    List<Venta> ventita = (ArrayList<Venta>) request.getAttribute("ventasrep");
-    String fech = LocalDate.now().toString();
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    Proforma proforma = (Proforma) request.getAttribute("proforma");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+        <%
+            List<Venta> ventita = (ArrayList<Venta>) request.getAttribute("ventasrep");
+            String fech = LocalDate.now().toString();
+            //Proforma proforma = (Proforma) request.getAttribute("proforma");
 %>
-<%    response.setHeader("Content-Type",
-            "application/pdf");
-    try {
-        Document documento = new Document();
-        OutputStream outs = response.getOutputStream();
-        PdfWriter.getInstance(documento, outs);
-        documento.open();
-        documento.addSubject("Reporte de ventas");
-        documento.addCreationDate();
-        documento.addTitle("Reporte de ventas");
-        documento.add(new Paragraph("Reporte de ventas"));
-        //documento.add(new Paragraph(new Date().toString());
-        documento.add(new Paragraph("\n"));
+    </head>
+    <body >
+        <div style="margin:10px" id="todo">
+            <h3 style="float:right" > <%=LocalDate.now()%></h3>
+            <h1 style="margin: 10px" >Reporte</h1>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre referencial</th>
+                        <th>Tipo Comprobante</th>
+                        <th>Fecha emisión</th>
+                        <th>Total</th>
 
-        PdfPTable table = new PdfPTable(4);
-        table.addCell("Id");
-        table.addCell("Tipo");
-        table.addCell("Proforma");
-        table.addCell("Fecha");
+                    </tr>
+                </thead>
+                <tbody>
+                    <%for (Venta v : ventita) {%>
+                    <tr>
+                        <td><%=v.getIdVenta()%></td>
+                        <td><%=v.getNombres()%> <%=v.getApePaterno()%> <%=v.getApeMaterno()%></td>
+                        <td><%=v.getTipoComprobante()%></td>
+                        <td><%=v.getFechaEmision()%></td>
+                        <td>
 
-        for (Venta v : ventita) {
-            String numero = v.getNumeroComprobante().toString();
-            String tipo = v.getTipoComprobante().toString();
-            String nombre = v.getNombres().toString();
-            String fecha = v.getFechaEmision().toString();
-            table.addCell(numero);
-            table.addCell(tipo);
-            table.addCell(nombre);
-            table.addCell(fecha);
-        }
+                    </tr>
+                    <% }%>
+                </tbody>
+            </table>
 
-        documento.add(table);
-        documento.close();
-        documento.add(new Paragraph(fech));
-
-    } catch (Exception e) {
-    }
-%>
+        </div>
+        <a class="btn btn-dark" onclick="generar()" role="button" style="margin-left: 10px" >Generar PDF</a>
+        <script>
+            function generar() {
+                const element = document.getElementById("todo");
+                html2pdf().from(element).save("Reporte de Ventas");
+            }
+            ;
+        </script>
+    </body>
+</html>
